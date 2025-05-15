@@ -1,6 +1,6 @@
 function createCharacter() {
-	char.tex = Paths.getSparrowAtlas('characters/bfChristmas');
-	char.frames = char.tex;
+	var tex = Paths.getSparrowAtlas('characters/bfChristmas');
+	char.frames = tex;
 	char.quickAnimAdd('idle', 'BF idle dance');
 	char.quickAnimAdd('singUP', 'BF NOTE UP0');
 	char.quickAnimAdd('singLEFT', 'BF NOTE LEFT0');
