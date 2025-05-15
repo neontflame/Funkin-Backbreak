@@ -101,10 +101,6 @@ class Stage extends FlxTypedGroup<FlxBasic> {
 
 	var fastCar:FlxSprite;
 
-	var upperBoppers:FlxSprite;
-	var bottomBoppers:FlxSprite;
-	var santa:FlxSprite;
-
 	var bgGirls:BackgroundGirls;
 
 	var tankWatchtower:BGSprite;
@@ -425,8 +421,6 @@ class Stage extends FlxTypedGroup<FlxBasic> {
 		switch (curStage) {
 			case 'limo':
 				gfVersion = 'gf-car';
-			case 'mall' | 'mallEvil':
-				gfVersion = 'gf-christmas';
 			case 'school':
 				gfVersion = 'gf-pixel';
 			case 'schoolEvil':
@@ -455,23 +449,11 @@ class Stage extends FlxTypedGroup<FlxBasic> {
 			}*/
 			case "monster":
 				dad.y += 100;
-			case 'monster-christmas':
-				dad.y += 130;
 			case 'dad':
 				camPos.x += 400;
 			case 'pico':
 				camPos.x += 600;
 				dad.y += 300;
-			case 'parents-christmas':
-				dad.x -= 500;
-			case 'senpai':
-				dad.x += 150;
-				dad.y += 360;
-				camPos.set(dad.getGraphicMidpoint().x + 300, dad.getGraphicMidpoint().y);
-			case 'senpai-angry':
-				dad.x += 150;
-				dad.y += 360;
-				camPos.set(dad.getGraphicMidpoint().x + 300, dad.getGraphicMidpoint().y);
 			case 'spirit':
 				dad.x -= 150;
 				dad.y += 100;

@@ -195,17 +195,6 @@ class Character extends FlxSprite {
 
 				loadOffsetFile(curCharacter);
 				playAnim('idle');
-			case 'monster-christmas':
-				tex = Paths.getSparrowAtlas('characters/monsterChristmas');
-				frames = tex;
-				quickAnimAdd('idle', 'monster idle');
-				quickAnimAdd('singUP', 'monster up note');
-				quickAnimAdd('singDOWN', 'monster down');
-				quickAnimAdd('singLEFT', 'Monster left note');
-				quickAnimAdd('singRIGHT', 'Monster Right note');
-
-				loadOffsetFile(curCharacter);
-				playAnim('idle');
 			case 'pico':
 				tex = Paths.getSparrowAtlas('characters/Pico_FNF_assetss');
 				frames = tex;
@@ -274,26 +263,6 @@ class Character extends FlxSprite {
 				flipX = true;
 
 				loadOffsetFile(curCharacter);
-
-			case 'bf-christmas':
-				tex = Paths.getSparrowAtlas('characters/bfChristmas');
-				frames = tex;
-				quickAnimAdd('idle', 'BF idle dance');
-				quickAnimAdd('singUP', 'BF NOTE UP0');
-				quickAnimAdd('singLEFT', 'BF NOTE LEFT0');
-				quickAnimAdd('singRIGHT', 'BF NOTE RIGHT0');
-				quickAnimAdd('singDOWN', 'BF NOTE DOWN0');
-				quickAnimAdd('singUPmiss', 'BF NOTE UP MISS');
-				quickAnimAdd('singLEFTmiss', 'BF NOTE LEFT MISS');
-				quickAnimAdd('singRIGHTmiss', 'BF NOTE RIGHT MISS');
-				quickAnimAdd('singDOWNmiss', 'BF NOTE DOWN MISS');
-				quickAnimAdd('hey', 'BF HEY');
-
-				loadOffsetFile(curCharacter);
-
-				playAnim('idle');
-
-				flipX = true;
 			case 'bf-car':
 				tex = Paths.getSparrowAtlas('characters/bfCar');
 				frames = tex;
@@ -434,9 +403,6 @@ class Character extends FlxSprite {
 				playAnim('idle');
 
 				antialiasing = false;
-
-			case 'parents-christmas':
-				// look in the scripts/characters/ folder for that!
 			case 'tankman':
 				frames = Paths.getSparrowAtlas('characters/tankmanCaptain');
 				quickAnimAdd('idle', 'Tankman Idle Dance');

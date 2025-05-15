@@ -15,4 +15,6 @@ function createCharacter() {
 	char.loadOffsetFile('parents-christmas');
 
 	char.playAnim('idle');
+	
+	char.x -= 500;
 }

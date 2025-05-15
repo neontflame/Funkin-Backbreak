@@ -1,6 +1,8 @@
 function createStageBack() {
 	var game = PlayState.instance;
 	
+	stage.gfVersion = 'gf-christmas';
+	
 	var bg:FlxSprite = new FlxSprite(-400, -500).loadGraphic(Paths.image("backgrounds/mallEvil/evilBG"));
 	bg.antialiasing = true;
 	bg.scrollFactor.set(0.2, 0.2);

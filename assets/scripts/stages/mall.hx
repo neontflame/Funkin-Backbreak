@@ -1,6 +1,8 @@
 function createStageBack() {
 	var game = PlayState.instance;
 	
+	stage.gfVersion = 'gf-christmas';
+	
 	game.boyfriend.x += 200;
 	game.boyfriend.camOffset[1] = -200;
 	
