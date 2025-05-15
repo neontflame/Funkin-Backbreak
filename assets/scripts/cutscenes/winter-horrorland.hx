@@ -2,7 +2,9 @@ import flixel.util.FlxColor;
 
 function cutscene()
 {
-	var blackScreen:FlxSprite = new FlxSprite(0, 0).makeGraphic(Std.int(FlxG.width * 2), Std.int(FlxG.height * 2), FlxColor.BLACK);
+	var game = PlayState.instance;
+	
+	var blackScreen:FlxSprite = new FlxSprite(0, 0).makeGraphic(Std.int(FlxG.width * 2), Std.int(FlxG.height * 2), 0xFF000000);
 	game.add(blackScreen);
 	blackScreen.scrollFactor.set();
 	game.camHUD.visible = false;
@@ -20,7 +22,7 @@ function cutscene()
 		{
 			game.camHUD.visible = true;
 			game.remove(blackScreen);
-			FlxTween.tween(FlxG.camera, {zoom: game.defaultCamZoom}, 2.5,
+			FlxTween.tween(FlxG.camera, {zoom: PlayState.defaultCamZoom}, 2.5,
 				{
 					ease: FlxEase.quadInOut,
 					onComplete: function(twn:FlxTween)

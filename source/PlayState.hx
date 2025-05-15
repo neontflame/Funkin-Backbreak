@@ -1225,6 +1225,8 @@ class PlayState extends MusicBeatState {
 		#end
 	}
 
+	public var exoticEnding:Bool = false;
+	
 	function endSong():Void {
 		allScriptCall("endSong");
 		seenCutscene = false;
@@ -1278,18 +1280,10 @@ class PlayState extends MusicBeatState {
 
 				FlxG.sound.music.stop();
 				vocals.stop();
-
-				if (SONG.song.toLowerCase() == 'eggnog') {
-					var blackShit:FlxSprite = new FlxSprite(-FlxG.width * FlxG.camera.zoom,
-						-FlxG.height * FlxG.camera.zoom).makeGraphic(FlxG.width * 3, FlxG.height * 3, FlxColor.BLACK);
-					blackShit.scrollFactor.set();
-					add(blackShit);
-					camHUD.visible = false;
-
-					FlxG.sound.play(Paths.sound('Lights_Shut_off'), 1, false, null, true, function() {
-						PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + difficulty, PlayState.storyPlaylist[0]);
-						LoadingState.loadAndSwitchState(new PlayState());
-					});
+				
+				allScriptCall("endSongPost", [difficulty]);
+				if (exoticEnding) {
+					// do whatever
 				} else {
 					prevCamFollow = camFollow;
 
