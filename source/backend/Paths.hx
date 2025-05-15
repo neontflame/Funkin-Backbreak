@@ -8,25 +8,9 @@ import openfl.utils.Assets as OpenFlAssets;
 class Paths {
 	inline public static var SOUND_EXT = 'ogg';
 
-	static var currentLevel:String;
-
-	inline static public function setCurrentLevel(name:String)
-		currentLevel = name.toLowerCase();
-
 	static public function getPath(file:String, type:AssetType, library:Null<String>) {
 		if (library != null)
 			return getLibraryPath(file, library);
-		/*
-		if (currentLevel != null) {
-			var levelPath = getLibraryPathForce(file, currentLevel);
-			if (OpenFlAssets.exists(levelPath, type))
-				return levelPath;
-
-			levelPath = getLibraryPathForce(file, 'shared');
-			if (OpenFlAssets.exists(levelPath, type))
-				return levelPath;
-		}
-		*/
 
 		return getPreloadPath(file);
 	}
@@ -55,8 +39,8 @@ class Paths {
 		return getPath('data/$key.xml', TEXT, library);
 	}
 
-	inline static public function json(key:String, ?library:String) {
-		return getPath('data/$key.json', TEXT, library);
+	inline static public function json(key:String, ?root:String = 'data', ?library:String) {
+		return getPath('$root/$key.json', TEXT, library);
 	}
 
 	inline static public function sound(key:String, ?library:String) {

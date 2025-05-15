@@ -194,8 +194,8 @@ class PlayState extends MusicBeatState {
 		add(stageBuild);
 		script.set('stage', stageBuild);
 		
-		if (CoolUtil.fileExists(Paths.txt('charts/${SONG.song.toLowerCase()}/dialogue'))) {
-			dialogue = Paths.getTextFileArray(Paths.txt('charts/${SONG.song.toLowerCase()}/dialogue'));
+		if (CoolUtil.fileExists(Paths.txt('dialogue/${SONG.song.toLowerCase()}'))) {
+			dialogue = Paths.getTextFileArray(Paths.txt('dialogue/${SONG.song.toLowerCase()}'));
 		}
 
 		#if discord_rpc
