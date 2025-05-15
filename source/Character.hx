@@ -21,6 +21,8 @@ class Character extends FlxSprite {
 	public var exoticDance:Bool = false;
 	
 	public var holdTimer:Float = 0;
+	
+	public var camOffset:Vector2 = [150, -100];
 
 	public var animationNotes:Array<Dynamic> = [];
 
@@ -434,23 +436,7 @@ class Character extends FlxSprite {
 				antialiasing = false;
 
 			case 'parents-christmas':
-				frames = Paths.getSparrowAtlas('characters/mom_dad_christmas_assets');
-				quickAnimAdd('idle', 'Parent Christmas Idle');
-				quickAnimAdd('singUP', 'Parent Up Note Dad');
-				quickAnimAdd('singDOWN', 'Parent Down Note Dad');
-				quickAnimAdd('singLEFT', 'Parent Left Note Dad');
-				quickAnimAdd('singRIGHT', 'Parent Right Note Dad');
-
-				quickAnimAdd('singUP-alt', 'Parent Up Note Mom');
-
-				quickAnimAdd('singDOWN-alt', 'Parent Down Note Mom');
-				quickAnimAdd('singLEFT-alt', 'Parent Left Note Mom');
-				quickAnimAdd('singRIGHT-alt', 'Parent Right Note Mom');
-
-				loadOffsetFile(curCharacter);
-
-				playAnim('idle');
-
+				// look in the scripts/characters/ folder for that!
 			case 'tankman':
 				frames = Paths.getSparrowAtlas('characters/tankmanCaptain');
 				quickAnimAdd('idle', 'Tankman Idle Dance');

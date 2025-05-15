@@ -1,3 +1,6 @@
+import LoadingState;
+import CutsceneAnimTestState;
+
 function cutscene()
 {
 	var game = PlayState.instance;

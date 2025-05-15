@@ -1454,10 +1454,12 @@ class PlayState extends MusicBeatState {
 	}
 
 	private function cameraMovement():Void {
-		if (camFollow.x != dad.getMidpoint().x + 150 && !cameraRightSide) {
-			camFollow.setPosition(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
+		if (camFollow.x != dad.getMidpoint().x + dad.camOffset.x && !cameraRightSide) {
+			camFollow.setPosition(dad.getMidpoint().x + dad.camOffset.x, dad.getMidpoint().y + dad.camOffset.y);
 			// camFollow.setPosition(lucky.getMidpoint().x - 120, lucky.getMidpoint().y + 210);
-
+			
+			/*
+			we can softcode this !
 			switch (dad.curCharacter) {
 				case 'mom':
 					camFollow.y = dad.getMidpoint().y;
@@ -1465,6 +1467,7 @@ class PlayState extends MusicBeatState {
 					camFollow.y = dad.getMidpoint().y - 430;
 					camFollow.x = dad.getMidpoint().x - 100;
 			}
+			*/
 
 			if (dad.curCharacter == 'mom')
 				vocals.volume = 1;
@@ -1474,14 +1477,12 @@ class PlayState extends MusicBeatState {
 			}
 		}
 
-		if (cameraRightSide && camFollow.x != boyfriend.getMidpoint().x - 100) {
-			camFollow.setPosition(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100);
+		if (cameraRightSide && camFollow.x != boyfriend.getMidpoint().x - boyfriend.camOffset.x) {
+			camFollow.setPosition(boyfriend.getMidpoint().x - boyfriend.camOffset.x, boyfriend.getMidpoint().y + boyfriend.camOffset.y);
 
 			switch (curStage) {
 				case 'limo':
 					camFollow.x = boyfriend.getMidpoint().x - 300;
-				case 'mall':
-					camFollow.y = boyfriend.getMidpoint().y - 200;
 				case 'school':
 					camFollow.x = boyfriend.getMidpoint().x - 200;
 					camFollow.y = boyfriend.getMidpoint().y - 200;

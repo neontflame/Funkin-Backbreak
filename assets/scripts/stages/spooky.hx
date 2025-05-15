@@ -1,6 +1,8 @@
+var game;
 var halloweenBG:FlxSprite;
 	
 function createStageBack() {
+	game = PlayState.instance;
 	var hallowTex = Paths.getSparrowAtlas('backgrounds/spooky/halloween_bg');
 
 	halloweenBG = new FlxSprite(-200, -100);
@@ -21,8 +23,8 @@ function lightningStrikeShit(curBeat) {
 	lightningStrikeBeat = curBeat;
 	lightningOffset = FlxG.random.int(8, 24);
 
-	boyfriend.playAnim('scared', true);
-	gf.playAnim('scared', true);
+	game.boyfriend.playAnim('scared', true);
+	game.gf.playAnim('scared', true);
 }
 
 function beatHit(curBeat) {
