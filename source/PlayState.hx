@@ -55,6 +55,7 @@ class PlayState extends MusicBeatState {
 	public static var deathCounter:Int = 0;
 	public static var practiceMode:Bool = false;
 	public static var seenCutscene:Bool = false;
+	public static var botplay:Bool = false;
 
 	var halloweenLevel:Bool = false;
 
@@ -847,8 +848,20 @@ class PlayState extends MusicBeatState {
 
 			if (player == 1) {
 				playerStrums.add(babyArrow);
+				
+				babyArrow.animation.finishCallback = function(name:String)
+				{
+					if (botplay)
+					{
+						if (name == "confirm")
+						{
+							babyArrow.animation.play('static', true);
+							babyArrow.centerOffsets();
+						}
+					}
+				}
 			}
-
+			
 			babyArrow.animation.play('static');
 			babyArrow.x += 50 + ((FlxG.width / 2) * player);
 
@@ -1216,8 +1229,16 @@ class PlayState extends MusicBeatState {
 			});
 		}
 
-		if (!inCutscene)
-			keyShit();
+		if (!inCutscene) {
+			if (botplay) {
+				keyShitAuto();
+			} else {
+				keyShit();
+			}
+		}
+		
+		if (FlxG.keys.justPressed.TWO)
+			botplay = !botplay;
 
 		#if debug
 		if (FlxG.keys.justPressed.ONE)
@@ -1493,6 +1514,7 @@ class PlayState extends MusicBeatState {
 		}
 	}
 
+	// NATURALPLAY
 	private function keyShit():Void {
 		var holdingArray:Array<Bool> = [controls.NOTE_LEFT, controls.NOTE_DOWN, controls.NOTE_UP, controls.NOTE_RIGHT];
 		var controlArray:Array<Bool> = [
@@ -1553,16 +1575,26 @@ class PlayState extends MusicBeatState {
 			});
 
 			if (possibleNotes.length > 0) {
+				var firstNotes:Map<Int, Note> = [];
+				
 				for (i in 0...controlArray.length) {
 					if (controlArray[i] && !ignoreList.contains(i)) {
 						badNoteHit();
 					}
 				}
-				for (possibleNote in possibleNotes) {
+				
+				for (note in possibleNotes) {
+					if (!firstNotes.exists(note.noteData)) {
+						firstNotes.set(note.noteData, note);
+					}
+				}
+				
+				for (possibleNote in firstNotes) {
 					if (controlArray[possibleNote.noteData]) {
 						goodNoteHit(possibleNote);
 					}
 				}
+				
 			} else
 				badNoteHit();
 		}
@@ -1587,7 +1619,51 @@ class PlayState extends MusicBeatState {
 			}
 		});
 	}
+	
+	// BOTPLAY
+	private function keyShitAuto():Void {
+		var hitNotes:Array<Note> = [];
+		
+		// FlxG.watch.addQuick('asdfa', upP);
+		notes.forEachAlive(function(daNote:Note)
+		{
+			if (!daNote.wasGoodHit && daNote.mustPress
+				&& daNote.strumTime < Conductor.songPosition + 60 * (!daNote.isSustainNote ? 0.125 : (daNote.prevNote.wasGoodHit ? 1 : 0)))
+			{
+					hitNotes.push(daNote);
+			}
+		});
 
+		if (boyfriend.holdTimer > 0.004 * Conductor.stepCrochet
+			&& boyfriend.animation.curAnim.name.startsWith('sing')
+			&& !boyfriend.animation.curAnim.name.endsWith('miss')) {
+			boyfriend.playAnim('idle');
+		}
+		
+		for (x in hitNotes)
+		{
+			boyfriend.holdTimer = 0;
+
+			goodNoteHit(x);
+
+			playerStrums.forEach(function(spr:FlxSprite)
+			{
+				if (Math.abs(x.noteData) == spr.ID)
+				{
+					spr.animation.play('confirm', true);
+					if (spr.animation.curAnim.name == 'confirm' && !(curStage.startsWith('school')))
+					{
+						spr.centerOffsets();
+						spr.offset.x -= 13;
+						spr.offset.y -= 13;
+					}
+					else
+						spr.centerOffsets();
+				}
+			});
+		}
+	}
+	
 	function noteMiss(direction:Int = 1):Void {
 		allScriptCall('noteMiss', [direction]);
 		if (!boyfriend.stunned) {
@@ -1794,11 +1870,15 @@ class PlayState extends MusicBeatState {
 		if (notesTotal > 0) {
 			accuracy = (notesHit / notesTotal) * 100;
 		}
-		scoreTxt.text = 'Score:' + songScore +
-						divider + 
-						'Misses:' + misses +
-						divider + 
-						'Accuracy:' + FlxMath.roundDecimal(accuracy, 2) + '%';
+		
+		scoreTxt.text = (botplay ? 'Autoplay!!' + divider : '' ) + 'Score:' + songScore;
+		
+		if (misses > 0) {
+		scoreTxt.text += divider + 
+						'Misses:' + misses;
+		}
+		
+		scoreTxt.text += ' (' + FlxMath.roundDecimal(accuracy, 2) + '%)';
 		
 		scoreTxt.screenCenter(X);
 	}
