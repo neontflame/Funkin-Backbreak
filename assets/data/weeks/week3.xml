@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Week name="PICO" hideOnStory="false" hideOnFreeplay="false" unlocked="true">
+	<StoryInfo player="bf" girlfriend="gf" opponent="pico" weekImg="week3"/>
+	<Song name="Pico" icon="pico" color="941653"/>
+	<Song name="Philly" icon="pico" color="941653"/>
+	<Song name="Blammed" icon="pico" color="941653"/>
+</Week>

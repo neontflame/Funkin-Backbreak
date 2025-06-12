@@ -100,6 +100,16 @@ class CoolUtil {
 		return OpenFLAssets.exists(path);
 		#end
 	}
+	
+	public static function readDir(path):Array<String> {
+		#if sys
+		var items:Array<String> = FileSystem.readDirectory(path);
+		#elseif openfl
+		var items:Array<String> = OpenFLAssets.list(path);
+		#end
+		
+		return items;
+	}
 		/**
 	 * Clears all images and sounds from the cache.
 	 * @author swordcube

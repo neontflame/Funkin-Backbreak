@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Week name="Daddy Dearest" hideOnStory="false" hideOnFreeplay="false" unlocked="true">
+	<StoryInfo player="bf" girlfriend="gf" opponent="dad" weekImg="week1"/>
+	<Song name="Bopeebo" icon="dad" color="9271FD"/>
+	<Song name="Fresh" icon="dad" color="9271FD"/>
+	<Song name="Dadbattle" icon="dad" color="9271FD"/>
+</Week>

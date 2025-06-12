@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Week name="TANKMAN" hideOnStory="false" hideOnFreeplay="false" unlocked="true">
+	<StoryInfo player="bf" girlfriend="gf" opponent="tankman" weekImg="week7"/>
+	<Song name="Ugh" icon="tankman" color="F6B604"/>
+	<Song name="Guns" icon="tankman" color="F6B604"/>
+	<Song name="Stress" icon="tankman" color="F6B604"/>
+</Week>

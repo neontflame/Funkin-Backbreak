@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Week name="RED SNOW" hideOnStory="false" hideOnFreeplay="false" unlocked="true">
+	<StoryInfo player="bf" girlfriend="gf" opponent="parents-christmas" weekImg="week5"/>
+	<Song name="Cocoa" icon="parents-christmas" color="A0D1FF"/>
+	<Song name="Eggnog" icon="parents-christmas" color="A0D1FF"/>
+	<Song name="Winter-Horrorland" icon="monster-christmas" color="A0D1FF"/>
+</Week>

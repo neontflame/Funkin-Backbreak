@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Week name="hating simulator ft. moawling" hideOnStory="false" hideOnFreeplay="false" unlocked="true">
+	<StoryInfo player="bf" girlfriend="gf" opponent="senpai" weekImg="week6"/>
+	<Song name="Senpai" icon="senpai" color="FF78BF"/>
+	<Song name="Roses" icon="senpai" color="FF78BF"/>
+	<Song name="Thorns" icon="spirit" color="FF78BF"/>
+</Week>

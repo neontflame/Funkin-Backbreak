@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Week name="HOW TO FUNK" hideOnStory="false" hideOnFreeplay="false" unlocked="true">
+	<StoryInfo player="bf" girlfriend="gf" opponent="dad" weekImg="tutorial"/>
+	<Song name="tutorial" icon="gf" color="9271FD"/>
+</Week>

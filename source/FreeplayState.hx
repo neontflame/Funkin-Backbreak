@@ -13,6 +13,11 @@ import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import lime.utils.Assets;
 
+import openfl.utils.Assets as OpenFlAssets;
+#if sys
+import sys.io.File;
+#end
+
 class FreeplayState extends MusicBeatState {
 	var songs:Array<SongMetadata> = [];
 
@@ -29,27 +34,47 @@ class FreeplayState extends MusicBeatState {
 	var intendedScore:Int = 0;
 
 	private var grpSongs:FlxTypedGroup<Alphabet>;
-	private var coolColors = [
-		0xFF9271FD,
-		0xFF9271FD,
-		0xFF223344,
-		0xFF941653,
-		0xFFFC96D7,
-		0xFFA0D1FF,
-		0xFFFF78BF,
-		0xFFF6B604
-	];
+	
+	private var coolColors:Array<Dynamic> = [];
 
 	private var curPlaying:Bool = false;
 
 	private var iconArray:Array<HealthIcon> = [];
 
 	override function create() {
+		var path = 'assets/data/weeks';
 		
-		var initSonglist = Paths.getTextFileArray(Paths.txt('freeplaySonglist'));
-
-		for (i in 0...initSonglist.length) {
-			songs.push(new SongMetadata(initSonglist[i], 1, 'gf'));
+		if (!CoolUtil.fileExists(path)) return;
+		
+		var itemCount:Int = 0;
+		var items:Array<String> = CoolUtil.readDir(path);
+		for (item in items) {
+			if (!item.endsWith('.xml')) return;
+			var weekPath:String = '$path/$item';
+			
+			itemCount += 1;
+			
+			#if sys
+			var weekXml:Xml = Xml.parse(
+			File.getContent(weekPath)
+			#else
+			OpenFlAssets.getText(weekPath)
+			#end
+			);
+			
+			// week parser!
+			var root:Xml = weekXml.firstElement();
+			
+			if (root.get("hideOnFreeplay") != "true") {
+				if (StoryMenuState.weekUnlocked[itemCount]) {
+					for (song in root.elementsNamed("Song")) {
+						if (song.get("name") != null) {
+							songs.push(new SongMetadata(song.get("name"), itemCount, song.get("icon")));
+							coolColors.push(FlxColor.fromString(song.get("color")));
+						}
+					}
+				}
+			}
 		}
 
 		/* 
@@ -68,28 +93,6 @@ class FreeplayState extends MusicBeatState {
 		if (!FlxG.sound.music.playing) {
 			FlxG.sound.playMusic(Paths.music('freakyMenu'));
 		}
-
-		if (StoryMenuState.weekUnlocked[2])
-			addWeek(['Bopeebo', 'Fresh', 'Dadbattle'], 1, ['dad']);
-
-		if (StoryMenuState.weekUnlocked[2])
-			addWeek(['Spookeez', 'South', 'Monster'], 2, ['spooky', 'spooky', 'monster']);
-
-		if (StoryMenuState.weekUnlocked[3])
-			addWeek(['Pico', 'Philly', 'Blammed'], 3, ['pico']);
-
-		if (StoryMenuState.weekUnlocked[4])
-			addWeek(['Satin-Panties', 'High', 'Milf'], 4, ['mom']);
-
-		if (StoryMenuState.weekUnlocked[5])
-			addWeek(['Cocoa', 'Eggnog', 'Winter-Horrorland'], 5, ['parents-christmas', 'parents-christmas', 'monster-christmas']);
-
-		if (StoryMenuState.weekUnlocked[6])
-			addWeek(['Senpai', 'Roses', 'Thorns'], 6, ['senpai', 'senpai', 'spirit']);
-
-		if (StoryMenuState.weekUnlocked[7])
-			addWeek(['Ugh', 'Guns', 'Stress'], 7, ['tankman']);
-
 		// LOAD MUSIC
 
 		// LOAD CHARACTERS
@@ -192,7 +195,7 @@ class FreeplayState extends MusicBeatState {
 		}
 
 		lerpScore = MathFunctions.fixedLerp(lerpScore, intendedScore, 0.4);
-		bg.color = FlxColor.interpolate(bg.color, coolColors[songs[curSelected].week % coolColors.length], MathFunctions.fixedLerpValue(0.045));
+		bg.color = FlxColor.interpolate(bg.color, coolColors[curSelected % coolColors.length], MathFunctions.fixedLerpValue(0.045));
 
 		scoreText.text = 'PERSONAL BEST:' + Math.round(lerpScore);
 		positionHighscore();

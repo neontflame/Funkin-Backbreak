@@ -16,35 +16,22 @@ import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import lime.net.curl.CURLCode;
 
+import openfl.utils.Assets;
+#if sys
+import sys.io.File;
+#end
+
 class StoryMenuState extends MusicBeatState {
 	var scoreText:FlxText;
+	
+	var weekImgs:Array<String> = [];
 
-	var weekData:Array<Dynamic> = [
-		['Tutorial'],
-		['Bopeebo', 'Fresh', 'Dadbattle'],
-		['Spookeez', 'South', 'Monster'],
-		['Pico', 'Philly', 'Blammed'],
-		['Satin-Panties', 'High', 'Milf'],
-		['Cocoa', 'Eggnog', 'Winter-Horrorland'],
-		['Senpai', 'Roses', 'Thorns'],
-		['Ugh', 'Guns', 'Stress']
-	];
+	var weekData:Array<Dynamic> = [];
+	public static var weekUnlocked:Array<Bool> = [];
+	var weekCharacters:Array<Dynamic> = [];
+	var weekNames:Array<String> = [];
+	
 	var curDifficulty:Int = 1;
-
-	public static var weekUnlocked:Array<Bool> = [true, true, true, true, true, true, true, true];
-
-	var weekCharacters:Array<Dynamic> = [
-		['dad', 'bf', 'gf'],
-		['dad', 'bf', 'gf'],
-		['spooky', 'bf', 'gf'],
-		['pico', 'bf', 'gf'],
-		['mom', 'bf', 'gf'],
-		['parents-christmas', 'bf', 'gf'],
-		['senpai', 'bf', 'gf'],
-		['tankman', 'bf', 'gf']
-	];
-
-	var weekNames:Array<String> = ';Daddy Dearest;Spooky Month;PICO;MOMMY MUST MURDER;RED SNOW;hating simulator ft. moawling;TANKMAN'.split(';');
 
 	var txtWeekTitle:FlxText;
 
@@ -63,6 +50,52 @@ class StoryMenuState extends MusicBeatState {
 	var rightArrow:FlxSprite;
 
 	override function create() {
+		var path = 'assets/data/weeks';
+		
+		if (!CoolUtil.fileExists(path)) return;
+		
+		var items:Array<String> = CoolUtil.readDir(path);
+		for (item in items) {
+			if (!item.endsWith('.xml')) return;
+			var weekPath:String = '$path/$item';
+			
+			#if sys
+			var weekXml:Xml = Xml.parse(
+			File.getContent(weekPath)
+			#else
+			Assets.getText(weekPath)
+			#end
+			);
+			
+			// week parser!
+			var root:Xml = weekXml.firstElement();
+			var storyIter = root.elementsNamed("StoryInfo");
+			if (storyIter.hasNext()) {
+				if (root.get("hideOnStory") != "true") {
+					var unlock:String = root.get("unlocked");
+					if (unlock != null && unlock == "false") weekUnlocked.push(false);
+					else weekUnlocked.push(true);
+					
+					var name:String = root.get("name");
+					if (name != null) weekNames.push(name);
+					
+					var storyInfo = storyIter.next();
+					var opponent:String = storyInfo.get("opponent");
+					var player:String = storyInfo.get("player");
+					var girlfriend:String = storyInfo.get("girlfriend");
+					weekCharacters.push([opponent, player, girlfriend]);
+					weekImgs.push(storyInfo.get("weekImg"));
+					
+					// Songs
+					var songs:Array<String> = [];
+					for (song in root.elementsNamed("Song")) {
+						var songName:String = song.get("name");
+						if (songName != null) songs.push(songName);
+					}
+					weekData.push(songs);
+				}
+			}
+		}
 		
 		transIn = FlxTransitionableState.defaultTransIn;
 		transOut = FlxTransitionableState.defaultTransOut;
@@ -107,9 +140,9 @@ class StoryMenuState extends MusicBeatState {
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence('In the Menus', null);
 		#end
-
-		for (i in 0...weekData.length) {
-			var weekThing:MenuItem = new MenuItem(0, yellowBG.y + yellowBG.height + 10, i);
+		
+		for (i in 0...weekImgs.length) {
+			var weekThing:MenuItem = new MenuItem(0, yellowBG.y + yellowBG.height + 10, weekImgs[i]);
 			weekThing.y += ((weekThing.height + 20) * i);
 			weekThing.targetY = i;
 			grpWeekText.add(weekThing);

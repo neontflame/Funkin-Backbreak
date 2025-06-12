@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Week name="Spooky Month" hideOnStory="false" hideOnFreeplay="false" unlocked="true">
+	<StoryInfo player="bf" girlfriend="gf" opponent="spooky" weekImg="week2"/>
+	<Song name="Spookeez" icon="spooky" color="223344"/>
+	<Song name="South" icon="spooky" color="223344"/>
+	<Song name="Monster" icon="monster" color="223344"/>
+</Week>
