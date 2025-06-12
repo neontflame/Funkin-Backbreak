@@ -35,7 +35,7 @@ class FreeplayState extends MusicBeatState {
 
 	private var grpSongs:FlxTypedGroup<Alphabet>;
 	
-	private var coolColors:Array<Int> = [];
+	private var coolColors:Array<Dynamic> = [];
 
 	private var curPlaying:Bool = false;
 
@@ -69,7 +69,7 @@ class FreeplayState extends MusicBeatState {
 				if (StoryMenuState.weekUnlocked[itemCount]) {
 					for (song in root.elementsNamed("Song")) {
 						if (song.get("name") != null) {
-							songs.push(new SongMetadata(song.get("name"), itemCount, song.get("icon")));
+							addSong(song.get("name"), itemCount, song.get("icon")));
 							coolColors.push(FlxColor.fromString(song.get("color")));
 						}
 					}
@@ -137,9 +137,6 @@ class FreeplayState extends MusicBeatState {
 
 		add(scoreText);
 
-		changeSelection();
-		changeDiff();
-
 		// FlxG.sound.playMusic(Paths.music('title'), 0);
 		// FlxG.sound.music.fadeIn(2, 0, 0.8);
 		selector = new FlxText();
@@ -168,6 +165,9 @@ class FreeplayState extends MusicBeatState {
 		 */
 
 		super.create();
+		
+		changeSelection();
+		changeDiff();
 	}
 
 	public function addSong(songName:String, weekNum:Int, songCharacter:String) {
@@ -195,8 +195,8 @@ class FreeplayState extends MusicBeatState {
 		}
 
 		lerpScore = MathFunctions.fixedLerp(lerpScore, intendedScore, 0.4);
-		if (coolColors.length > 0)
-			bg.color = FlxColor.interpolate(bg.color, coolColors[curSelected % coolColors.length], MathFunctions.fixedLerpValue(0.045));
+		if (coolColors.length > 0 && curSelected < coolColors.length)
+			bg.color = FlxColor.interpolate(bg.color, coolColors[curSelected], MathFunctions.fixedLerpValue(0.045));
 
 		scoreText.text = 'PERSONAL BEST:' + Math.round(lerpScore);
 		positionHighscore();
