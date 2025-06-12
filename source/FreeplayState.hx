@@ -35,7 +35,9 @@ class FreeplayState extends MusicBeatState {
 
 	private var grpSongs:FlxTypedGroup<Alphabet>;
 	
-	private var coolColors:Array<Dynamic> = [];
+	private var coolColors:Array<Int> = [
+	0xFFFFFFFF
+	];
 
 	private var curPlaying:Bool = false;
 
@@ -195,7 +197,7 @@ class FreeplayState extends MusicBeatState {
 		}
 
 		lerpScore = MathFunctions.fixedLerp(lerpScore, intendedScore, 0.4);
-		bg.color = FlxColor.interpolate(bg.color, coolColors[curSelected % coolColors.length], MathFunctions.fixedLerpValue(0.045));
+		bg.color = FlxColor.interpolate(bg.color, coolColors[(curSelected + 1) % coolColors.length], MathFunctions.fixedLerpValue(0.045));
 
 		scoreText.text = 'PERSONAL BEST:' + Math.round(lerpScore);
 		positionHighscore();
