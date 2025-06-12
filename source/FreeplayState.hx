@@ -35,7 +35,7 @@ class FreeplayState extends MusicBeatState {
 
 	private var grpSongs:FlxTypedGroup<Alphabet>;
 	
-	private var coolColors:Array<Dynamic> = [];
+	private var coolColors:Array<Int> = [];
 
 	private var curPlaying:Bool = false;
 
@@ -66,11 +66,14 @@ class FreeplayState extends MusicBeatState {
 			var root:Xml = weekXml.firstElement();
 			
 			if (root.get("hideOnFreeplay") != "true") {
-				if (StoryMenuState.weekUnlocked[itemCount]) {
+				if (StoryMenuState.weekUnlocked.length > 0 ? StoryMenuState.weekUnlocked[itemCount] : root.get("unlocked") == "true") {
 					for (song in root.elementsNamed("Song")) {
 						if (song.get("name") != null) {
+							var color:String = '0x' + song.get("color");
 							addSong(song.get("name"), itemCount, song.get("icon"));
-							coolColors.push(FlxColor.fromString(song.get("color")));
+							trace(color);
+							trace(FlxColor.fromString(color));
+							coolColors.push(FlxColor.fromString(color));
 						}
 					}
 				}
