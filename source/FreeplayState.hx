@@ -69,7 +69,7 @@ class FreeplayState extends MusicBeatState {
 				if (StoryMenuState.weekUnlocked[itemCount]) {
 					for (song in root.elementsNamed("Song")) {
 						if (song.get("name") != null) {
-							addSong(song.get("name"), itemCount, song.get("icon")));
+							addSong(song.get("name"), itemCount, song.get("icon"));
 							coolColors.push(FlxColor.fromString(song.get("color")));
 						}
 					}
