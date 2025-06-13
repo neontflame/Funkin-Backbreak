@@ -66,11 +66,11 @@ class FreeplayState extends MusicBeatState {
 			var root:Xml = weekXml.firstElement();
 			
 			if (root.get("hideOnFreeplay") != "true") {
-				if (StoryMenuState.weekUnlocked.length > 0 ? StoryMenuState.weekUnlocked[itemCount] : root.get("unlocked") == "true") {
+				if (StoryMenuState.weekUnlocked.get(root.get("name")) != null ? StoryMenuState.weekUnlocked[root.get("name")] : root.get("unlocked") == "true") {
 					for (song in root.elementsNamed("Song")) {
 						if (song.get("name") != null) {
 							var color:String = '0x' + song.get("color");
-							addSong(song.get("name"), itemCount, song.get("icon"));
+							addSong(song.get("name"), root.get("name"), song.get("icon"));
 							trace(color);
 							trace(FlxColor.fromString(color));
 							coolColors.push(FlxColor.fromString(color));
@@ -173,17 +173,17 @@ class FreeplayState extends MusicBeatState {
 		changeDiff();
 	}
 
-	public function addSong(songName:String, weekNum:Int, songCharacter:String) {
-		songs.push(new SongMetadata(songName, weekNum, songCharacter));
+	public function addSong(songName:String, weekName:String, songCharacter:String) {
+		songs.push(new SongMetadata(songName, weekName, songCharacter));
 	}
 
-	public function addWeek(songs:Array<String>, weekNum:Int, ?songCharacters:Array<String>) {
+	public function addWeek(songs:Array<String>, weekName:String, ?songCharacters:Array<String>) {
 		if (songCharacters == null)
 			songCharacters = ['bf'];
 
 		var num:Int = 0;
 		for (song in songs) {
-			addSong(song, weekNum, songCharacters[num]);
+			addSong(song, weekName, songCharacters[num]);
 
 			if (songCharacters.length != 1)
 				num++;
@@ -287,10 +287,10 @@ class FreeplayState extends MusicBeatState {
 
 class SongMetadata {
 	public var songName:String = '';
-	public var week:Int = 0;
+	public var week:String = '';
 	public var songCharacter:String = '';
 
-	public function new(song:String, week:Int, songCharacter:String) {
+	public function new(song:String, week:String, songCharacter:String) {
 		this.songName = song;
 		this.week = week;
 		this.songCharacter = songCharacter;

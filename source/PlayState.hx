@@ -49,7 +49,7 @@ class PlayState extends MusicBeatState {
 	public static var curStage:String = '';
 	public static var SONG:SwagSong;
 	public static var isStoryMode:Bool = false;
-	public static var storyWeek:Int = 0;
+	public static var storyWeek:String = '';
 	public static var storyPlaylist:Array<String> = [];
 	public static var storyDifficulty:Int = 1;
 	public static var deathCounter:Int = 0;
@@ -224,7 +224,7 @@ class PlayState extends MusicBeatState {
 
 		// String that contains the mode defined here so it isn't necessary to call changePresence for each mode
 		if (isStoryMode) {
-			detailsText = 'Story Mode: Week ' + storyWeek;
+			detailsText = 'Story Mode: ' + storyWeek;
 		} else {
 			detailsText = 'Freeplay';
 		}
@@ -1270,13 +1270,19 @@ class PlayState extends MusicBeatState {
 				transIn = FlxTransitionableState.defaultTransIn;
 				transOut = FlxTransitionableState.defaultTransOut;
 
-				if (storyWeek == 7)
+				if (storyWeek == 'TANKMAN')
 					FlxG.switchState(new VideoState());
 				else
 					FlxG.switchState(new StoryMenuState());
 
 				// if ()
-				StoryMenuState.weekUnlocked[Std.int(Math.min(storyWeek + 1, StoryMenuState.weekUnlocked.length - 1))] = true;
+				var keys = [for (k in StoryMenuState.weekUnlocked.keys()) k];
+				var currentIndex = keys.indexOf(storyWeek);
+				if (currentIndex != -1 && currentIndex < keys.length - 1) {
+					StoryMenuState.weekUnlocked.set(keys[currentIndex + 1], true);
+				}
+				
+				// StoryMenuState.weekUnlocked.set(storyWeek, true);
 
 				if (SONG.validScore) {
 					Highscore.saveWeekScore(storyWeek, campaignScore, storyDifficulty);

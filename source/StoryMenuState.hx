@@ -27,7 +27,7 @@ class StoryMenuState extends MusicBeatState {
 	var weekImgs:Array<String> = [];
 
 	var weekData:Array<Dynamic> = [];
-	public static var weekUnlocked:Array<Bool> = [];
+	public static var weekUnlocked:Map<String, Bool> = [];
 	var weekCharacters:Array<Dynamic> = [];
 	var weekNames:Array<String> = [];
 	
@@ -73,8 +73,11 @@ class StoryMenuState extends MusicBeatState {
 			if (storyIter.hasNext()) {
 				if (root.get("hideOnStory") != "true") {
 					var unlock:String = root.get("unlocked");
-					if (unlock != null && unlock == "false") weekUnlocked.push(false);
-					else weekUnlocked.push(true);
+					
+					if (weekUnlocked.get(root.get("name")) == null) {
+						if (unlock != null && unlock == "false") weekUnlocked.set(root.get("name"), false);
+						else weekUnlocked.set(root.get("name"), true);
+					}
 					
 					var name:String = root.get("name");
 					if (name != null) weekNames.push(name);
@@ -150,7 +153,7 @@ class StoryMenuState extends MusicBeatState {
 			weekThing.screenCenter(X);
 
 			// Needs an offset thingie
-			if (!weekUnlocked[i]) {
+			if (!weekUnlocked[weekNames[i]]) {
 				var lock:FlxSprite = new FlxSprite(weekThing.width + 10 + weekThing.x);
 				lock.frames = ui_tex;
 				lock.animation.addByPrefix('lock', 'lock');
@@ -247,7 +250,7 @@ class StoryMenuState extends MusicBeatState {
 
 		// FlxG.watch.addQuick('font', scoreText.font);
 
-		difficultySelectors.visible = weekUnlocked[curWeek];
+		difficultySelectors.visible = weekUnlocked[weekNames[curWeek]];
 
 		grpLocks.forEach(function(lock:FlxSprite) {
 			lock.y = grpWeekText.members[lock.ID].y;
@@ -298,7 +301,7 @@ class StoryMenuState extends MusicBeatState {
 	var stopspamming:Bool = false;
 
 	function selectWeek() {
-		if (weekUnlocked[curWeek]) {
+		if (weekUnlocked[weekNames[curWeek]]) {
 			if (stopspamming == false) {
 				FlxG.sound.play(Paths.sound('confirmMenu'));
 
@@ -323,7 +326,7 @@ class StoryMenuState extends MusicBeatState {
 			PlayState.storyDifficulty = curDifficulty;
 
 			PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + diffic, PlayState.storyPlaylist[0].toLowerCase());
-			PlayState.storyWeek = curWeek;
+			PlayState.storyWeek = weekNames[curWeek];
 			PlayState.campaignScore = 0;
 			new FlxTimer().start(1, function(tmr:FlxTimer) {
 				LoadingState.loadAndSwitchState(new PlayState(), true);
@@ -377,7 +380,7 @@ class StoryMenuState extends MusicBeatState {
 
 		for (item in grpWeekText.members) {
 			item.targetY = bullShit - curWeek;
-			if (item.targetY == 0 && weekUnlocked[curWeek])
+			if (item.targetY == 0 && weekUnlocked[weekNames[curWeek]])
 				item.alpha = 1;
 			else
 				item.alpha = 0.6;

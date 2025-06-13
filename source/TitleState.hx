@@ -73,12 +73,12 @@ class TitleState extends MusicBeatState {
 		PlayerSettings.init();
 		Highscore.load();
 
-		if (FlxG.save.data.weekUnlocked != null) { // QUICK PATCH OOPS!
+		/* if (FlxG.save.data.weekUnlocked != null) { // QUICK PATCH OOPS!
 			if (StoryMenuState.weekUnlocked.length < 4)
-				StoryMenuState.weekUnlocked.insert(0, true);
+				StoryMenuState.weekUnlocked.set(0, true);
 			if (!StoryMenuState.weekUnlocked[0])
 				StoryMenuState.weekUnlocked[0] = true;
-		}
+		} */
 
 		if (FlxG.save.data.seenVideo != null)
 			VideoState.seenVideo = FlxG.save.data.seenVideo;

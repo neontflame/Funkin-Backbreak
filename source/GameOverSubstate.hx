@@ -81,7 +81,7 @@ class GameOverSubstate extends MusicBeatSubstate {
 			FlxG.camera.follow(camFollow, LOCKON, 0.01);
 		}
 
-		if (PlayState.storyWeek == 7) {
+		if (PlayState.storyWeek == 'TANKMAN') {
 			if (bf.animation.curAnim.name == 'firstDeath' && bf.animation.curAnim.finished && !playingDeathSound) {
 				playingDeathSound = true;
 				bf.startedDeath = true;
