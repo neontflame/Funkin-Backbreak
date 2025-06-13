@@ -238,10 +238,14 @@ class PlayState extends MusicBeatState {
 
 		// defines the girl
 		gf = new Character(400, 130, 'gf');
+		gf.typeOfChar = 'gf';
 
 		dad = new Character(100, 100, SONG.player2);
+		dad.typeOfChar = 'dad';
+		
 		camPos = new FlxPoint(dad.getGraphicMidpoint().x, dad.getGraphicMidpoint().y);
 		boyfriend = new Boyfriend(770, 450, SONG.player1);
+		boyfriend.typeOfChar = 'bf';
 
 		// set the dad's position (check the stage class to edit that!)
 		// reminder that this probably isn't the best way to do this but hey it works I guess and is cleaner
@@ -251,6 +255,7 @@ class PlayState extends MusicBeatState {
 		stageBuild.createStageBack();
 		
 		gf = new Character(400, 130, stageBuild.returnGFtype(curStage));
+		gf.typeOfChar = 'gf';
 		gf.scrollFactor.set(0.95, 0.95);
 		
 		if (stageBuild.returnGFtype(curStage) == 'pico-speaker') {
