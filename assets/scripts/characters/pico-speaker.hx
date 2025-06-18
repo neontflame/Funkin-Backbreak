@@ -1,4 +1,5 @@
-import backend.Section.SwagSection;
+import backend.Song;
+import backend.Section.*;
 import bg.TankmenBG;
 
 var animationNotes:Array<Dynamic> = [];
@@ -15,7 +16,10 @@ function createCharacter() {
 
 	char.playAnim('shoot1');
 
-	char.loadMappedAnims();
+	loadMappedAnims();
+	
+	char.y -= 125;
+	char.x -= 50;
 }
 
 function loadMappedAnims() {
@@ -31,21 +35,25 @@ function loadMappedAnims() {
 }
 	
 function update(elapsed){
-	if (char.animationNotes.length > 0 && Conductor.songPosition > char.animationNotes[0][0]) {
+	if (animationNotes.length > 0 && Conductor.songPosition > animationNotes[0][0]) {
 	
-		trace('played shoot anim' + char.animationNotes[0][1]);
+		trace('played shoot anim' + animationNotes[0][1]);
 		
 		var shotDirection:Int = 1;
-		if (char.animationNotes[0][1] >= 2) {
+		if (animationNotes[0][1] >= 2) {
 			shotDirection = 3;
 		}
 		shotDirection += FlxG.random.int(0, 1);
 
 		char.playAnim('shoot' + shotDirection, true);
-		char.animationNotes.shift();
+		animationNotes.shift();
 	}
 	
 	if (char.animation.curAnim.finished) {
 		char.playAnim(char.animation.curAnim.name, false, false, char.animation.curAnim.frames.length - 3);
 	}
+}
+
+function sortAnims(x, y) {
+	return x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : 0;
 }

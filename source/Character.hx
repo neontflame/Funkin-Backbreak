@@ -308,10 +308,6 @@ class Character extends FlxSprite {
 		}
 	}
 
-	function sortAnims(x, y) {
-		return x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : 0;
-	}
-
 	function quickAnimAdd(Name:String, Prefix:String) {
 		animation.addByPrefix(Name, Prefix, 24, false);
 	}
