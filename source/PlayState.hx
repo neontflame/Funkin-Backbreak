@@ -59,6 +59,7 @@ class PlayState extends MusicBeatState {
 
 	var halloweenLevel:Bool = false;
 
+	private var inst:FlxSound;
 	private var vocals:FlxSound;
 	private var vocalsFinished = false;
 
@@ -155,14 +156,16 @@ class PlayState extends MusicBeatState {
 		
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
-
+		
+		/*
 		var instPath = Paths.inst(SONG.song.toLowerCase());
 		if (Assets.exists(instPath, SOUND) || Assets.exists(instPath, MUSIC))
 			Assets.getSound(instPath, true);
 		var vocalsPath = Paths.voices(SONG.song.toLowerCase());
 		if (Assets.exists(vocalsPath, SOUND) || Assets.exists(vocalsPath, MUSIC))
 			Assets.getSound(vocalsPath, true);
-
+		*/
+		
 		// var gameCam:FlxCamera = FlxG.camera;
 		camGame = new FlxCamera();
 		camHUD = new FlxCamera();
@@ -648,8 +651,10 @@ class PlayState extends MusicBeatState {
 		previousFrameTime = FlxG.game.ticks;
 		lastReportedPlayheadPosition = 0;
 
-		if (!paused)
-			FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song), 1, false);
+		if (!paused) {
+			@:privateAccess
+			FlxG.sound.playMusic(inst._sound, 1, false);
+		}
 		FlxG.sound.music.onComplete = endSong;
 		vocals.play();
 
@@ -682,6 +687,11 @@ class PlayState extends MusicBeatState {
 			vocalsFinished = true;
 		};
 		FlxG.sound.list.add(vocals);
+		
+		inst = new FlxSound();
+		try {	inst.loadEmbedded(Paths.inst(PlayState.SONG.song));	}
+		catch (e:Dynamic) {}
+		FlxG.sound.list.add(inst);
 
 		notes = new FlxTypedGroup<Note>();
 		add(notes);

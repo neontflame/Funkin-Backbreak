@@ -54,14 +54,14 @@ class LoadingState extends MusicBeatState {
 		initSongsManifest().onComplete(function(lib) {
 			callbacks = new MultiCallback(onLoad);
 			var introComplete = callbacks.add('introComplete');
-			checkLoadSong(getSongPath());
-			if (PlayState.SONG.needsVoices)
-				checkLoadSong(getVocalPath());
-			checkLibrary('shared');
+			// checkLoadSong(getSongPath());
+			// if (PlayState.SONG.needsVoices)
+				// checkLoadSong(getVocalPath());
+			// checkLibrary('shared');
 			// if (PlayState.storyWeek > 0)
 			//	checkLibrary('week' + PlayState.storyWeek);
 			// else
-			checkLibrary('weekAssets');
+			// checkLibrary('weekAssets');
 
 			FlxG.camera.fade(FlxG.camera.bgColor, 0.5, true);
 			new FlxTimer().start(1.5, function(_) introComplete());

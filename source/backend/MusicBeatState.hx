@@ -13,7 +13,8 @@ class MusicBeatState extends FlxUIState {
 		return PlayerSettings.player1.controls;
 
 	override function create() {
-		CoolUtil.clearCache(true, true, false);
+		Paths.clearStoredMemory();
+		Paths.clearUnusedMemory();
 		
 		// dump
 		if (transIn != null)
