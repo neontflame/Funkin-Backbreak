@@ -17,18 +17,23 @@ class GameOverSubstate extends MusicBeatSubstate {
 	var randomGameover:Int = 1;
 	var playingDeathSound:Bool = false;
 
-	public function new(x:Float, y:Float) {
+	public function new(x:Float, y:Float, charDead:String = "") {
 		var daStage = PlayState.curStage;
 		var daBf:String = '';
-		switch (daStage) {
-			case 'school' | 'schoolEvil':
-				stageSuffix = '-pixel';
-				daBf = 'bf-pixel-dead';
-			default:
-				daBf = 'bf';
-		}
-		if (PlayState.SONG.song.toLowerCase() == 'stress') {
-			daBf = 'bf-holding-gf-dead';
+		
+		if (charDead != "")
+			daBf = charDead;
+		else {
+			switch (daStage) {
+				case 'school' | 'schoolEvil':
+					stageSuffix = '-pixel';
+					daBf = 'bf-pixel-dead';
+				default:
+					daBf = 'bf';
+			}
+			if (PlayState.SONG.song.toLowerCase() == 'stress') {
+				daBf = 'bf-holding-gf-dead';
+			}
 		}
 
 		super();

@@ -17,6 +17,7 @@ class Character extends FlxSprite {
 	public var typeOfChar:String = 'dad';
 	
 	public var curCharacter:String = 'bf';
+	public var gameOverChar:String = '';
 
 	public var exoticDance:Bool = false;
 	

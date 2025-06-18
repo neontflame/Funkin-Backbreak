@@ -1105,7 +1105,7 @@ class PlayState extends MusicBeatState {
 
 				deathCounter += 1;
 
-				openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
+				openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y, boyfriend.gameOverChar));
 
 				#if discord_rpc
 				// Game Over doesn't get his own variable because it's only used here
