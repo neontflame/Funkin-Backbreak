@@ -109,7 +109,7 @@ class Stage extends FlxTypedGroup<FlxBasic> {
 	public var tankmanRun:FlxTypedGroup<TankmenBG>;
 
 	public function createStageBack() {
-		var boyfriend:Boyfriend = PlayState.instance.boyfriend;
+		var boyfriend:Character = PlayState.instance.boyfriend;
 		var gf:Character = PlayState.instance.gf;
 		var dad:Character = PlayState.instance.dad;
 		stageScript.set('bf', boyfriend);
@@ -479,7 +479,7 @@ class Stage extends FlxTypedGroup<FlxBasic> {
 	var tankSpeed:Float = FlxG.random.float(5, 7);
 	var tankX:Float = 400;
 
-	public function stageUpdate(curBeat:Int, boyfriend:Boyfriend, gf:Character, dad:Character) {
+	public function stageUpdate(curBeat:Int, boyfriend:Character, gf:Character, dad:Character) {
 		stageScript.call('beatHit', [curBeat]);
 		// trace('update backgrounds');
 		switch (PlayState.curStage) {
@@ -531,7 +531,7 @@ class Stage extends FlxTypedGroup<FlxBasic> {
 		}
 	}
 
-	public function stageUpdateConstant(elapsed:Float, boyfriend:Boyfriend, gf:Character, dad:Character) {
+	public function stageUpdateConstant(elapsed:Float, boyfriend:Character, gf:Character, dad:Character) {
 		stageScript.call('update', [elapsed]);
 
 		switch (PlayState.curStage) {

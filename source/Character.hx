@@ -320,8 +320,27 @@ class Character extends FlxSprite {
 		}
 	}
 
+	// Boyfriend.hx is no more
+	public var stunned:Bool = false;
+	public var startedDeath:Bool = false;
+
 	override function update(elapsed:Float) {
-		if (!curCharacter.startsWith('bf')) {
+		if (isPlayer) {
+			if (!debugMode) {
+				if (animation.curAnim.name.startsWith('sing')) {
+					holdTimer += elapsed;
+				} else
+					holdTimer = 0;
+
+				if (animation.curAnim.name.endsWith('miss') && animation.curAnim.finished && !debugMode) {
+					playAnim('idle', true, false, 10);
+				}
+
+				if (animation.curAnim.name == 'firstDeath' && animation.curAnim.finished && startedDeath) {
+					playAnim('deathLoop');
+				}
+			}
+		} else {
 			if (animation.curAnim.name.startsWith('sing')) {
 				holdTimer += elapsed;
 			}
