@@ -455,52 +455,53 @@ class PlayState extends MusicBeatState {
 		#end
 	}
 	
+	#if html5
+	public var midsongVideo:FlxVideo;
+	#elseif cpp
+	public var midsongVideo:FunkinVideoSprite;
+	#end
 	function playVideoMidsong(path) {
 		var black:FlxSprite = new FlxSprite(-200, -200).makeGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
 		black.scrollFactor.set();
 		add(black);
 		
 		#if html5
-		var vid:FlxVideo = new FlxVideo(path).finishCallback = function() {
+		midsongVideo:FlxVideo = new FlxVideo(path).finishCallback = function() {
 			remove(black);
 			FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, (Conductor.stepCrochet / 1000) * 5, {ease: FlxEase.quadInOut});
 		};
-		vid.cameras = [camOther];
-		add(vid);
+		midsongVideo.cameras = [camOther];
+		add(midsongVideo);
 		#elseif cpp
-		var video:FunkinVideoSprite = new FunkinVideoSprite(0, 0);
-		video.cameras = [camOther];
-		video.antialiasing = true;
+		midsongVideo = new FunkinVideoSprite(0, 0);
+		midsongVideo.cameras = [camOther];
+		midsongVideo.antialiasing = true;
 		// Resize videos bigger or smaller than the screen.
-		video.bitmap.onFormatSetup.add(function():Void {
-			if (video == null) return;
-			video.setGraphicSize(FlxG.width, FlxG.height);
-			video.updateHitbox();
-			video.x = 0;
-			video.y = 0;
+		midsongVideo.bitmap.onFormatSetup.add(function():Void {
+			if (midsongVideo == null) return;
+			midsongVideo.setGraphicSize(FlxG.width, FlxG.height);
+			midsongVideo.updateHitbox();
+			midsongVideo.x = 0;
+			midsongVideo.y = 0;
 			// video.scale.set(0.5, 0.5);
 		});
-		video.bitmap.onEndReached.add(function() {
-			video.destroy();
+		midsongVideo.bitmap.onEndReached.add(function() {
+			midsongVideo.destroy();
 			remove(black);
 			FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, (Conductor.stepCrochet / 1000) * 5, {ease: FlxEase.quadInOut});
 		});
 		
-		add(video);
+		add(midsongVideo);
 
-		if (video.load(path)) {
-			FlxTimer.wait(0.01, () -> video.play());
+		if (midsongVideo.load(path)) {
+			FlxTimer.wait(0.01, () -> midsongVideo.play());
 		} else {
-			video.destroy();
+			midsongVideo.destroy();
 			remove(black);
 			FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, (Conductor.stepCrochet / 1000) * 5, {ease: FlxEase.quadInOut});
-			startCountdown();
-			cameraMovement();
 		}
 		#else
 			trace('[PLAYSTATE] No video support :(');
-			startCountdown();
-			cameraMovement();
 		#end
 		
 	}
@@ -1077,7 +1078,13 @@ class PlayState extends MusicBeatState {
 
 				vocals.stop();
 				FlxG.sound.music.stop();
-
+				#if html5
+				if (midsongVideo != null)
+					midsongVideo.finishVideo();
+				#elseif cpp
+				if (midsongVideo != null)
+					midsongVideo.destroy();
+				#end
 				deathCounter += 1;
 
 				openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y, boyfriend.gameOverChar));
