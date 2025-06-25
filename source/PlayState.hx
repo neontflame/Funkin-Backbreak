@@ -34,6 +34,7 @@ import openfl.utils.Assets;
 
 import crowplexus.iris.Iris;
 import backend.IrisHandler;
+import backend.EventTimeline;
 import bg.*;
 
 #if html5
@@ -55,7 +56,10 @@ class PlayState extends MusicBeatState {
 	public static var deathCounter:Int = 0;
 	public static var practiceMode:Bool = false;
 	public static var seenCutscene:Bool = false;
+	public var hasCutscene:Bool = false;
 	public var botplay:Bool = false;
+	
+	var timeline:EventTimeline;
 
 	var halloweenLevel:Bool = false;
 
@@ -140,9 +144,16 @@ class PlayState extends MusicBeatState {
 
 	override public function create() {
 		instance = this;
-
+		timeline = new EventTimeline();
+		
 		// lifted from Funkin-Multikey
 		script = new IrisHandler();
+		script.loadFolder('songs/' + PlayState.SONG.song.toLowerCase());
+		script.set('game', instance);
+		script.set('timeline', timeline);
+		allScriptCall("init");
+		
+		/* 
 		var file:String = Paths.script('songs/' + PlayState.SONG.song.toLowerCase());
 		trace(file);
 
@@ -151,7 +162,7 @@ class PlayState extends MusicBeatState {
 			trace("ADDING SCRIPT: " + file);
 			script.addByPath(file);
 			script.setup();
-		}
+		} */
 		
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
@@ -180,6 +191,8 @@ class PlayState extends MusicBeatState {
 
 		if (SONG == null)
 			SONG = Song.loadFromJson('tutorial');
+			
+		script.set('song', SONG);
 
 		Conductor.mapBPMChanges(SONG);
 		Conductor.changeBPM(SONG.bpm);
@@ -368,12 +381,9 @@ class PlayState extends MusicBeatState {
 
 		if (isStoryMode && !seenCutscene) {
 			seenCutscene = true;
-			if (CoolUtil.fileExists(Paths.script("cutscenes/" + SONG.song.toLowerCase()))) {
-				trace(Paths.script("cutscenes/" + SONG.song.toLowerCase()) + ' EXISTS!');
-				script.addByPath(Paths.script("cutscenes/" + SONG.song.toLowerCase()));
+			if (hasCutscene) {
 				allScriptCall("cutscene");
 			} else {
-				trace(Paths.script("cutscenes/" + SONG.song.toLowerCase()) + ' DOES NOT EXIST!');
 				startCountdown();
 			}
 		} else {
@@ -428,7 +438,7 @@ class PlayState extends MusicBeatState {
 		add(video);
 
 		if (video.load(path)) {
-			FlxTimer.wait(0.001, () -> video.play());
+			FlxTimer.wait(0.01, () -> video.play());
 		} else {
 			video.destroy();
 			remove(black);
@@ -1706,6 +1716,7 @@ class PlayState extends MusicBeatState {
 
 	override function stepHit() {
 		allScriptCall("stepHit");
+		timeline.stepHit(curStep);
 		super.stepHit();
 		if (Math.abs(FlxG.sound.music.time - (Conductor.songPosition - Conductor.offset)) > 20
 			|| (SONG.needsVoices && Math.abs(vocals.time - (Conductor.songPosition - Conductor.offset)) > 20)) {
@@ -1721,6 +1732,7 @@ class PlayState extends MusicBeatState {
 	override function beatHit() {
 		super.beatHit();
 		allScriptCall("beatHit");
+		timeline.beatHit(curBeat);
 
 		if (generatedMusic) {
 			notes.members.sort(function(note1:Note, note2:Note) {

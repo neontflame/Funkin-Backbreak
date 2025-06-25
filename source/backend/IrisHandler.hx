@@ -9,7 +9,7 @@ import sys.io.File;
 using StringTools;
 
 class IrisHandler {
-	public static var path:String = "assets/data/scripts";
+	public static var path:String = "assets/scripts";
 	public static var extensions:Array<String> = ["hx", "hxs", "hxc", "hscript"];
 
 	var scripts:Array<Iris> = [];
@@ -19,30 +19,23 @@ class IrisHandler {
 			// loadFolder(folders);
 	}
 
-	/*
-	public function loadFolder(folders:Array<String>):Void {
-		for (folder in folders) {
-			#if sys
-			if (!sys.FileSystem.exists('./$path/$folder')) return;
-			var items:Array<String> = sys.FileSystem.readDirectory('./${path + (folder != "" ? "/" : "")}$folder');
-			#elseif openfl
-			if (!Assets.exists('./$path/$folder')) return;
-			var items:Array<String> = Assets.list('./${path + (folder != "" ? "/" : "")}$folder');
-			#end
-			for (item in items) {
-				for (extension in extensions)
-					if (!item.endsWith('.$extension')) return;
-				var scriptPath:String = (folder != "" ? folder + "/" : folder) + item;
-				#if sys
-				var script:Iris = new Iris(File.getContent('./$path/$scriptPath'), {name: scriptPath, autoRun: true, autoPreset: true});
-				#else
-				var script:Iris = new Iris(Assets.getText('./$path/$scriptPath'), {name: scriptPath, autoRun: true, autoPreset: true});
-				#end
-				add(script);
+
+	public function loadFolder(folder:String):Void {
+		if (!CoolUtil.fileExists('$path/$folder')) return;
+		var items:Array<String> = CoolUtil.readDir('$path/$folder');
+		for (item in items) {
+			var extCount:Int = 0;
+			
+			for (extension in extensions) {
+				if (item.endsWith('.$extension')) extCount += 1;
 			}
+			
+			if (extCount <= 0) return;
+			
+			var scriptPath:String = '$path/$folder/$item';
+			addByPath(scriptPath);
 		}
 	}
-	*/
 	
 	public function addByPath(path:String):Void {
 		#if sys
@@ -50,6 +43,7 @@ class IrisHandler {
 		#else
 		var script:Iris = new Iris(Assets.getText(path), {name: path, autoRun: true, autoPreset: true});
 		#end
+		trace('[SCRIPT LOADED] $path');
 		add(script);
 	}
 	

@@ -1,10 +1,8 @@
 import backend.Song;
 import PlayState;
 import LoadingState;
-var game;
 
 function createPost() {
-	game = PlayState.instance;
 	game.exoticEnding = true;
 }
 

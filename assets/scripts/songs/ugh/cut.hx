@@ -1,10 +1,12 @@
 import LoadingState;
 import CutsceneAnimTestState;
 
+function init() {
+	game.hasCutscene = true;
+}
+
 function cutscene()
 {
-	var game = PlayState.instance;
-	
 	game.playVideoCutscene('assets/videos/ughCutscene.mp4');
 	
 	FlxG.camera.zoom = PlayState.defaultCamZoom * 1.2;

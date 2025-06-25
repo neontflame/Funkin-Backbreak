@@ -1,7 +1,8 @@
-var game;
+function init() {
+	game.hasCutscene = true;
+}
 
 function cutscene() {
-	game = PlayState.instance;
 	softcodedSchoolIntro(game.newDialogueBox(game.dialogue, game.startCountdown, game.camHUD));
 }
 
