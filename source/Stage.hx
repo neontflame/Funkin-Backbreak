@@ -74,12 +74,9 @@ class Stage extends FlxTypedGroup<FlxBasic> {
 		
 		stageScript = new IrisHandler();
 		var file:String = Paths.script('stages/' + PlayState.curStage);
-		trace(file);
-
-		trace(CoolUtil.fileExists(file));
 		if (CoolUtil.fileExists(file))
 		{
-			trace("Stage: " + file);
+			trace("[STAGE] " + file);
 			stageScript.addByPath(file);
 			stageScript.setup();
 			stageScript.set('stage', this);

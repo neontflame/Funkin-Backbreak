@@ -5,14 +5,14 @@ import discord_rpc.DiscordRpc;
 
 class DiscordClient {
 	public function new() {
-		trace('Discord Client starting...');
+		trace('[DISCORD] Discord Client starting...');
 		DiscordRpc.start({
 			clientID: '814588678700924999',
 			onReady: onReady,
 			onError: onError,
 			onDisconnected: onDisconnected
 		});
-		trace('Discord Client started.');
+		trace('[DISCORD] Discord Client started.');
 
 		while (true) {
 			DiscordRpc.process();
@@ -37,18 +37,18 @@ class DiscordClient {
 	}
 
 	static function onError(_code:Int, _message:String) {
-		trace('Error! $_code : $_message');
+		trace('[DISCORD] Error! $_code : $_message');
 	}
 
 	static function onDisconnected(_code:Int, _message:String) {
-		trace('Disconnected! $_code : $_message');
+		trace('[DISCORD] Disconnected! $_code : $_message');
 	}
 
 	public static function initialize() {
 		var DiscordDaemon = sys.thread.Thread.create(() -> {
 			new DiscordClient();
 		});
-		trace('Discord Client initialized');
+		trace('[DISCORD] Discord Client initialized');
 	}
 
 	public static function changePresence(details:String, state:Null<String>, ?smallImageKey:String, ?hasStartTimestamp:Bool, ?endTimestamp:Float) {
