@@ -107,6 +107,7 @@ class PlayState extends MusicBeatState {
 	private var iconP1:HealthIcon;
 	private var iconP2:HealthIcon;
 	private var camHUD:FlxCamera;
+	private var camOther:FlxCamera;
 	private var camGame:FlxCamera;
 
 	var dialogue:Array<String> = ['blah blah blah', 'coolswag'];
@@ -176,10 +177,13 @@ class PlayState extends MusicBeatState {
 
 		// var gameCam:FlxCamera = FlxG.camera;
 		camGame = new FlxCamera();
+		camOther = new FlxCamera();
+		camOther.bgColor.alpha = 0;
 		camHUD = new FlxCamera();
 		camHUD.bgColor.alpha = 0;
 
 		FlxG.cameras.reset(camGame);
+		FlxG.cameras.add(camOther, false);
 		FlxG.cameras.add(camHUD, false);
 
 		grpNoteSplashes = new FlxTypedGroup<NoteSplash>(4);
@@ -412,9 +416,7 @@ class PlayState extends MusicBeatState {
 			startCountdown();
 			cameraMovement();
 		};
-		#end
-		
-		#if cpp
+		#elseif cpp
 		var video:FunkinVideoSprite = new FunkinVideoSprite(0, 0);
 		video.cameras = [camHUD];
 		video.antialiasing = true;
@@ -446,15 +448,61 @@ class PlayState extends MusicBeatState {
 			startCountdown();
 			cameraMovement();
 		}
+		#else
+			trace('[PLAYSTATE] No video support :(');
+			startCountdown();
+			cameraMovement();
 		#end
 	}
 	
-	function initDiscord() {
-		// Angel here.
-		// I have no idea what this function does.
-		// The function is still in the compiled code, but everything inside was ommited since it was compiled for the HTML target.
-		// Just leaving this here in case I ever figure out what it was used for.
-		// If I never find a use for this, sorry, but this is just staying here cause it's a part of v0.2.8's code lol.
+	function playVideoMidsong(path) {
+		var black:FlxSprite = new FlxSprite(-200, -200).makeGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
+		black.scrollFactor.set();
+		add(black);
+		
+		#if html5
+		var vid:FlxVideo = new FlxVideo(path).finishCallback = function() {
+			remove(black);
+			FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, (Conductor.stepCrochet / 1000) * 5, {ease: FlxEase.quadInOut});
+		};
+		vid.cameras = [camOther];
+		add(vid);
+		#elseif cpp
+		var video:FunkinVideoSprite = new FunkinVideoSprite(0, 0);
+		video.cameras = [camOther];
+		video.antialiasing = true;
+		// Resize videos bigger or smaller than the screen.
+		video.bitmap.onFormatSetup.add(function():Void {
+			if (video == null) return;
+			video.setGraphicSize(FlxG.width, FlxG.height);
+			video.updateHitbox();
+			video.x = 0;
+			video.y = 0;
+			// video.scale.set(0.5, 0.5);
+		});
+		video.bitmap.onEndReached.add(function() {
+			video.destroy();
+			remove(black);
+			FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, (Conductor.stepCrochet / 1000) * 5, {ease: FlxEase.quadInOut});
+		});
+		
+		add(video);
+
+		if (video.load(path)) {
+			FlxTimer.wait(0.01, () -> video.play());
+		} else {
+			video.destroy();
+			remove(black);
+			FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, (Conductor.stepCrochet / 1000) * 5, {ease: FlxEase.quadInOut});
+			startCountdown();
+			cameraMovement();
+		}
+		#else
+			trace('[PLAYSTATE] No video support :(');
+			startCountdown();
+			cameraMovement();
+		#end
+		
 	}
 
 	function schoolIntro(?dialogueBox:DialogueBox):Void {
