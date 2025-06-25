@@ -120,32 +120,35 @@ class CoolUtil {
 			// Clear OpenFL & Lime Assets
 			OpenFLAssets.cache.clear();
 			Assets.cache.clear();
-			trace('asset cache cleared i think');
+			trace('[CLEARCACHE] Assets cleared!');
 		} 
 		
 		if (bitmaps) {
 			// Clear all Flixel bitmaps
 			FlxG.bitmap.dumpCache();
 			FlxG.bitmap.clearCache();
-			trace('bitmap cache cleared too');
+			trace('[CLEARCACHE] Bitmaps cleared!');
 		}
 		
+		var soundCount:Int = 0;
 		if (sounds) {
 			// Clear all Flixel sounds
 			FlxG.sound.list.forEach((sound:FlxSound) -> {
 				sound.stop();
 				sound.kill();
 				sound.destroy();
-				trace('fuck you sound');
+				
+				soundCount += 1;
 			});
+			trace('[CLEARCACHE] $soundCount sounds cleared!');
 			FlxG.sound.list.clear();
 			FlxG.sound.destroy(false);
-		trace('sound cache cleared mhm');
+			trace('[CLEARCACHE] Soundlist cleared!');
 		}
 		
 		// Run garbage collector just in case none of that worked
 		System.gc();
-		trace('here comes the garbage truck woo');
+			trace('[CLEARCACHE] Garbage collected!');
 	}
 
 }

@@ -36,12 +36,10 @@ class Character extends FlxSprite {
 		
 		charScript = new IrisHandler();
 		var file:String = Paths.script('characters/' + curCharacter);
-		trace(file);
-
-		trace(CoolUtil.fileExists(file));
+		
 		if (CoolUtil.fileExists(file))
 		{
-			trace("Character: " + file);
+			trace("[CHARACTER] " + file);
 			charScript.addByPath(file);
 			charScript.setup();
 			charScript.set('char', this);

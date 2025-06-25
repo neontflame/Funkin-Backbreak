@@ -1010,7 +1010,7 @@ class PlayState extends MusicBeatState {
 			// RESET = Quick Game Over Screen
 			if (controls.RESET) {
 				health = 0;
-				trace('RESET = True');
+				// trace('RESET = True');
 			}
 
 			// CHEAT = brandon's a pussy
@@ -1231,8 +1231,7 @@ class PlayState extends MusicBeatState {
 				if (storyDifficulty == 2)
 					difficulty = '-hard';
 
-				trace('LOADING NEXT SONG');
-				trace(PlayState.storyPlaylist[0].toLowerCase() + difficulty);
+				trace('[PLAYSTATE] Loading next song: ' + PlayState.storyPlaylist[0].toLowerCase() + difficulty);
 
 				FlxTransitionableState.skipNextTransIn = true;
 				FlxTransitionableState.skipNextTransOut = true;
@@ -1252,7 +1251,6 @@ class PlayState extends MusicBeatState {
 				}
 			}
 		} else {
-			trace('WENT BACK TO FREEPLAY??');
 			FlxG.switchState(new FreeplayState());
 		}
 	}
@@ -1293,8 +1291,7 @@ class PlayState extends MusicBeatState {
 
 		var daRating:String = 'sick';
 		var doSplash:Bool = true;
-
-		trace(noteDiff + ', ' + calcJudgement(noteDiff));
+		
 		daRating = 	calcJudgement(noteDiff)[0];
 		score = 	calcJudgement(noteDiff)[1];
 		accAdder = 	calcJudgement(noteDiff)[2];

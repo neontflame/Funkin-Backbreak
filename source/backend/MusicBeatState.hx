@@ -16,8 +16,8 @@ class MusicBeatState extends FlxUIState {
 		CoolUtil.clearCache(true, true, false);
 		
 		// dump
-		if (transIn != null)
-			trace('reg ' + transIn.region);
+		// if (transIn != null)
+		//	trace('reg ' + transIn.region);
 			
 		super.create();
 	}

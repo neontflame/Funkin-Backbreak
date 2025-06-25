@@ -71,8 +71,6 @@ class FreeplayState extends MusicBeatState {
 						if (song.get("name") != null) {
 							var color:String = '0x' + song.get("color");
 							addSong(song.get("name"), root.get("name"), song.get("icon"));
-							trace(color);
-							trace(FlxColor.fromString(color));
 							coolColors.push(FlxColor.fromString(color));
 						}
 					}
@@ -236,7 +234,7 @@ class FreeplayState extends MusicBeatState {
 			PlayState.storyDifficulty = curDifficulty;
 
 			PlayState.storyWeek = songs[curSelected].week;
-			trace('CUR WEEK' + PlayState.storyWeek);
+			trace('[FREEPLAYSTATE] Going to "' + songs[curSelected].songName.toLowerCase() + '" at ' + Highscore.difficultyString + ' difficulty');
 			LoadingState.loadAndSwitchState(new PlayState());
 		}
 	}
