@@ -47,6 +47,9 @@ class PreferencesMenu extends Page {
 	}
 
 	public static function initPrefs() {
+		if(FlxG.save.data.preferences != null)
+			preferences = FlxG.save.data.preferences;
+
 		preferenceCheck('censor-naughty', true);
 		preferenceCheck('downscroll', false);
 		preferenceCheck('flashing-menu', true);
@@ -60,12 +63,18 @@ class PreferencesMenu extends Page {
 			Lib.current.stage.removeChild(Main.fpsCounter);
 		}
 		FlxG.autoPause = getPref('auto-pause');
+
+		FlxG.save.data.preferences = preferences;
+		FlxG.save.flush();
 	}
 
 	public static function preferenceCheck(identifier:String, defaultValue:Dynamic) {
 		if (preferences.get(identifier) == null) {
 			preferences.set(identifier, defaultValue);
 			trace('set preference!');
+
+			FlxG.save.data.preferences = preferences;
+			FlxG.save.flush();
 		} else {
 			trace('found preference: ' + Std.string(preferences.get(identifier)));
 		}
