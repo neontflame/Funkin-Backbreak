@@ -1342,6 +1342,19 @@ class PlayState extends MusicBeatState {
 		return judgements.get(180);
 	}
 	
+	function getRatingPath(type:String, name:String, theme:String):String {
+		var base = 'ui/ratingShit/';
+		var prefix:String = '';
+		var suffix:String = '';
+		
+		switch (theme) {
+			case 'pixel':
+				prefix = 'pixelUI/';
+				suffix = '-pixel';
+		}
+		return Paths.image(base + prefix + (type != '' ? type + '/' : '') + name + suffix);
+	}
+
 	private function popUpScore(strumtime:Float, daNote:Note):Void {
 		var noteDiff:Float = Math.abs(strumtime - Conductor.songPosition);
 		vocals.volume = 1;
@@ -1375,16 +1388,10 @@ class PlayState extends MusicBeatState {
 
 		if (!practiceMode)
 			songScore += score;
+		
+		var coolTheme:String = (curStage.startsWith('school') ? 'pixel' : 'default');
 
-		var pixelShitPart1:String = '';
-		var pixelShitPart2:String = '';
-
-		if (curStage.startsWith('school')) {
-			pixelShitPart1 = 'pixelUI/';
-			pixelShitPart2 = '-pixel';
-		}
-
-		rating.loadGraphic(Paths.image('ui/ratingShit/' + pixelShitPart1 + 'ratings/' + daRating + pixelShitPart2));
+		rating.loadGraphic(Paths.image(getRatingPath('ratings', daRating, coolTheme)));
 		rating.screenCenter();
 		rating.x = coolText.x;
 		rating.y -= 60;
@@ -1394,7 +1401,7 @@ class PlayState extends MusicBeatState {
 		
 		rating.cameras = [camHUD];
 		
-		var comboSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image('ui/ratingShit/' + pixelShitPart1 + 'combo' + pixelShitPart2));
+		var comboSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image(getRatingPath('', 'combo', coolTheme)));
 		comboSpr.screenCenter();
 		comboSpr.x = coolText.x;
 		comboSpr.acceleration.y = 600;
@@ -1428,15 +1435,15 @@ class PlayState extends MusicBeatState {
 		var daLoop:Int = 0;
 		var prevWidth:Float = 0;
 		for (i in seperatedScore) {
-			var numScore:FlxSprite = new FlxSprite().loadGraphic(Paths.image('ui/ratingShit/' + pixelShitPart1 + 'numbers/num' + Std.int(i) + pixelShitPart2));
+			var numScore:FlxSprite = new FlxSprite().loadGraphic(Paths.image(getRatingPath('numbers', 'num' + Std.int(i), coolTheme)));
 			numScore.screenCenter();
 			// numScore.y += 80;
 
-			if (!curStage.startsWith('school')) {
-				numScore.setGraphicSize(Std.int(numScore.width * 0.4));
-			} else {
+			if (coolTheme == 'pixel') {
 				numScore.antialiasing = false;
-				numScore.setGraphicSize(Std.int(numScore.width * daPixelZoom));
+				numScore.setGraphicSize(Std.int(numScore.width * daPixelZoom * 0.4));
+			} else {
+				numScore.setGraphicSize(Std.int(numScore.width * 0.4));
 			}
 			numScore.updateHitbox();
 			numScore.x = rating.x + (prevWidth * 0.9 * daLoop);
