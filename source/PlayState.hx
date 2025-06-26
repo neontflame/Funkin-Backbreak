@@ -1410,14 +1410,14 @@ class PlayState extends MusicBeatState {
 		comboSpr.velocity.x += FlxG.random.int(1, 10);
 		insert(members.indexOf(boyfriend), rating);
 
-		if (!curStage.startsWith('school')) {
-			rating.setGraphicSize(Std.int(rating.width * 0.55));
-			comboSpr.setGraphicSize(Std.int(comboSpr.width * 0.55));
-		} else {
+		if (coolTheme == 'pixel') {
 			rating.antialiasing = false;
 			comboSpr.antialiasing = false;
 			rating.setGraphicSize(Std.int(rating.width * daPixelZoom * 0.55));
 			comboSpr.setGraphicSize(Std.int(comboSpr.width * daPixelZoom * 0.55));
+		} else {
+			rating.setGraphicSize(Std.int(rating.width * 0.55));
+			comboSpr.setGraphicSize(Std.int(comboSpr.width * 0.55));
 		}
 
 		comboSpr.updateHitbox();
@@ -1441,7 +1441,7 @@ class PlayState extends MusicBeatState {
 
 			if (coolTheme == 'pixel') {
 				numScore.antialiasing = false;
-				numScore.setGraphicSize(Std.int(numScore.width * daPixelZoom * 0.4));
+				numScore.setGraphicSize(Std.int(numScore.width * daPixelZoom * 0.55));
 			} else {
 				numScore.setGraphicSize(Std.int(numScore.width * 0.4));
 			}
