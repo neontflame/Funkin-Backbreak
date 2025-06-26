@@ -1,0 +1,27 @@
+function createCharacter() {
+	char.frames = Paths.getSparrowAtlas('characters/BOYFRIEND');
+	char.quickAnimAdd('idle', 'BF idle dance');
+	char.quickAnimAdd('singUP', 'BF NOTE UP0');
+	char.quickAnimAdd('singLEFT', 'BF NOTE LEFT0');
+	char.quickAnimAdd('singRIGHT', 'BF NOTE RIGHT0');
+	char.quickAnimAdd('singDOWN', 'BF NOTE DOWN0');
+	char.quickAnimAdd('singUPmiss', 'BF NOTE UP MISS');
+	char.quickAnimAdd('singLEFTmiss', 'BF NOTE LEFT MISS');
+	char.quickAnimAdd('singRIGHTmiss', 'BF NOTE RIGHT MISS');
+	char.quickAnimAdd('singDOWNmiss', 'BF NOTE DOWN MISS');
+	char.quickAnimAdd('hey', 'BF HEY');
+
+	char.quickAnimAdd('firstDeath', 'BF dies');
+	char.animation.addByPrefix('deathLoop', 'BF Dead Loop', 24, true);
+	char.quickAnimAdd('deathConfirm', 'BF Dead confirm');
+
+	char.animation.addByPrefix('scared', 'BF idle shaking', 24, true);
+
+	char.loadOffsetFile('bf');
+
+	char.playAnim('idle');
+
+	char.flipX = true;
+
+	char.loadOffsetFile('bf');
+}

@@ -10,4 +10,7 @@ function createCharacter() {
 	char.loadOffsetFile('dad');
 
 	char.playAnim('idle');
+	
+	char.camOffset[0] += 400;
+	char.singLength = 6.1;
 }

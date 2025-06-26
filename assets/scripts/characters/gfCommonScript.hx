@@ -14,6 +14,7 @@ var gfDadVis:Bool = false;
 function update(elapsed){
 	if (char.typeOfChar == 'dad' && PlayState.instance.gf.curCharacter == char.curCharacter && !gfDadVis) {
 		PlayState.instance.gf.visible = false;
+		char.setPosition(PlayState.instance.gf.x, PlayState.instance.gf.y);
 		gfDadVis = true;
 	}
 	

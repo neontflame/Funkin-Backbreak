@@ -1,5 +1,5 @@
 function createCharacter() {
-	char.frames = Paths.getSparrowAtlas('characters/Mom_Assets');
+	char.frames = Paths.getSparrowAtlas('characters/momCar');
 
 	char.quickAnimAdd('idle', 'Mom Idle');
 	char.quickAnimAdd('singUP', 'Mom Up Pose');
@@ -8,9 +8,15 @@ function createCharacter() {
 	// ANIMATION IS CALLED MOM LEFT POSE BUT ITS FOR THE RIGHT
 	// CUZ DAVE IS DUMB!
 	char.quickAnimAdd('singRIGHT', 'Mom Pose Left');
+	char.animation.addByIndices('idleHair', 'Mom Idle', [10, 11, 12, 13], '', 24, true);
 
-	char.loadOffsetFile('mom');
+	char.loadOffsetFile('mom-car');
 
 	char.playAnim('idle');
-	char.camOffset[1] = 0;
+}
+
+function update(elapsed){
+	if (!char.animation.curAnim.name.startsWith('sing') && char.animation.curAnim.finished) {
+		char.playAnim('idleHair');
+	}
 }
