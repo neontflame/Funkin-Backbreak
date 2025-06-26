@@ -8,14 +8,14 @@ function createCharacter() {
 
 	char.loadOffsetFile('spirit');
 
-	char.setGraphicSize(Std.int(width * 6));
+	char.setGraphicSize(Std.int(char.width * 6));
 	char.updateHitbox();
 
 	char.playAnim('idle');
 
 	char.antialiasing = false;
 	
-	char.camOffset[0] = 300;
+	char.camOffset[0] = 100;
 	char.camOffset[1] = 0;
 	
 	char.x -= 150;

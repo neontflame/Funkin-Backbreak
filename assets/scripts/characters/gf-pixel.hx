@@ -15,7 +15,7 @@ function createCharacter() {
 
 	char.playAnim('danceRight');
 
-	char.setGraphicSize(Std.int(width * 6));
+	char.setGraphicSize(Std.int(char.width * 6));
 	char.updateHitbox();
 	char.antialiasing = false;
 }

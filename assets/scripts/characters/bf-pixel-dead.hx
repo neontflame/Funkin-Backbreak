@@ -9,7 +9,7 @@ function createCharacter() {
 	char.loadOffsetFile('bf-pixel-dead');
 	char.playAnim('firstDeath');
 	// pixel bullshit
-	char.setGraphicSize(Std.int(width * 6));
+	char.setGraphicSize(Std.int(char.width * 6));
 	char.updateHitbox();
 	char.antialiasing = false;
 	char.flipX = true;

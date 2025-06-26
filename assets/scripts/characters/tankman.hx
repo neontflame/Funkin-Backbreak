@@ -1,16 +1,18 @@
+using StringTools;
+
 function createCharacter() {
 	char.frames = Paths.getSparrowAtlas('characters/tankmanCaptain');
 	char.quickAnimAdd('idle', 'Tankman Idle Dance');
-	if (isPlayer) {
-			quickAnimAdd('singLEFT', 'Tankman Note Left ');
-			quickAnimAdd('singRIGHT', 'Tankman Right Note ');
-			quickAnimAdd('singLEFTmiss', 'Tankman Note Left MISS');
-			quickAnimAdd('singRIGHTmiss', 'Tankman Right Note MISS');
+	if (char.isPlayer) {
+			char.quickAnimAdd('singLEFT', 'Tankman Note Left ');
+			char.quickAnimAdd('singRIGHT', 'Tankman Right Note ');
+			char.quickAnimAdd('singLEFTmiss', 'Tankman Note Left MISS');
+			char.quickAnimAdd('singRIGHTmiss', 'Tankman Right Note MISS');
 	} else {
-			quickAnimAdd('singLEFT', 'Tankman Right Note ');
-			quickAnimAdd('singRIGHT', 'Tankman Note Left ');
-			quickAnimAdd('singLEFTmiss', 'Tankman Right Note MISS');
-			quickAnimAdd('singRIGHTmiss', 'Tankman Note Left MISS');
+			char.quickAnimAdd('singLEFT', 'Tankman Right Note ');
+			char.quickAnimAdd('singRIGHT', 'Tankman Note Left ');
+			char.quickAnimAdd('singLEFTmiss', 'Tankman Right Note MISS');
+			char.quickAnimAdd('singRIGHTmiss', 'Tankman Note Left MISS');
 	}
 	char.quickAnimAdd('singUP', 'Tankman UP note ');
 	char.quickAnimAdd('singDOWN', 'Tankman DOWN note ');

@@ -25,7 +25,7 @@ function createCharacter() {
 
 	char.flipX = true;
 		
-	char.camOffset[0] = 350;
+	char.camOffset[0] = 250;
 	if (!char.isPlayer) {
 		char.y += 300;
 	}

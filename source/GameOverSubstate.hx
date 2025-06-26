@@ -12,7 +12,7 @@ class GameOverSubstate extends MusicBeatSubstate {
 	var bf:Character;
 	var camFollow:FlxObject;
 
-	var stageSuffix:String = '';
+	public var stageSuffix:String = '';
 
 	var randomGameover:Int = 1;
 	var playingDeathSound:Bool = false;
@@ -23,18 +23,8 @@ class GameOverSubstate extends MusicBeatSubstate {
 		
 		if (charDead != "")
 			daBf = charDead;
-		else {
-			switch (daStage) {
-				case 'school' | 'schoolEvil':
-					stageSuffix = '-pixel';
-					daBf = 'bf-pixel-dead';
-				default:
-					daBf = 'bf';
-			}
-			if (PlayState.SONG.song.toLowerCase() == 'stress') {
-				daBf = 'bf-holding-gf-dead';
-			}
-		}
+		else 
+			daBf = 'bf';
 
 		super();
 

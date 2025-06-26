@@ -1,8 +1,11 @@
 function createStageBack() {
+	game = PlayState.instance;
+	
 	stage.gfVersion = 'gf-pixel';
 	
-	PlayState.defaultCamZoom = 1;
-	
+	game.boyfriend.x += 200;
+	game.boyfriend.y += 220;
+
 	var bg:FlxSprite = new FlxSprite(400, 200);
 	bg.frames = Paths.getSparrowAtlas('backgrounds/schoolEvil/animatedEvilSchool');
 	bg.animation.addByPrefix('idle', 'background 2', 24);
@@ -12,3 +15,8 @@ function createStageBack() {
 	bg.antialiasing = false;
 	game.add(bg);
 }
+
+function createStageFront() {
+	game.gf.x += 180;
+	game.gf.y += 300;
+} 

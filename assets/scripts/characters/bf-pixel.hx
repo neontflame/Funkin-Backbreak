@@ -1,3 +1,5 @@
+import GameOverSubstate;
+
 function createCharacter() {
 	char.frames = Paths.getSparrowAtlas('characters/bfPixel');
 	char.quickAnimAdd('idle', 'BF IDLE');
@@ -12,7 +14,7 @@ function createCharacter() {
 
 	char.loadOffsetFile('bf-pixel');
 
-	char.setGraphicSize(Std.int(width * 6));
+	char.setGraphicSize(Std.int(char.width * 6));
 	char.updateHitbox();
 
 	char.playAnim('idle');
@@ -24,4 +26,5 @@ function createCharacter() {
 
 	char.flipX = true;
 	char.gameOverChar = 'bf-pixel-dead';
+	GameOverSubstate.stageSuffix = '-pixel';
 }

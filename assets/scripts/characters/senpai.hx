@@ -10,12 +10,13 @@ function createCharacter() {
 
 	char.playAnim('idle');
 
-	char.setGraphicSize(Std.int(width * 6));
+	char.setGraphicSize(Std.int(char.width * 6));
 	char.updateHitbox();
 
 	char.antialiasing = false;
 	
-	char.camOffset[0] = -430;
+	char.camOffset[0] = -100;
+	char.camOffset[1] = -450;
 	
 	char.x += 150;
 	char.y += 360;

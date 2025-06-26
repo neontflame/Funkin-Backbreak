@@ -5,6 +5,14 @@ function init() {
 	game.hasCutscene = true;
 }
 
+function createPost() {
+	/* timeline.queueBeat(5, 
+	function(){
+		game.playVideoMidsong('assets/videos/ughCutscene.mp4');
+	}
+	); */
+}
+
 function cutscene()
 {
 	game.playVideoCutscene('assets/videos/ughCutscene.mp4');

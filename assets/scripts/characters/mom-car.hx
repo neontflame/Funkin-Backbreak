@@ -1,3 +1,5 @@
+using StringTools;
+
 function createCharacter() {
 	char.frames = Paths.getSparrowAtlas('characters/momCar');
 
