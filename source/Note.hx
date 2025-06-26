@@ -118,7 +118,7 @@ class Note extends FlxSprite {
 			alpha = 0.6;
 
 			if (PreferencesMenu.getPref('downscroll')) {
-				angle = 180;
+				// angle = 180;
 			}
 
 			x += width;
