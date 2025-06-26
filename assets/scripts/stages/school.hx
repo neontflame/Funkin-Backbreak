@@ -1,8 +1,9 @@
 var bgGirls;
 var game;
-
+var curSong;
 function createStageBack() {
 	game = PlayState.instance;
+	curSong = PlayState.SONG.song.toLowerCase();
 	
 	stage.gfVersion = 'gf-pixel';
 	
@@ -69,17 +70,19 @@ function createStageBack() {
 	bgGirls = new BackgroundGirls(-100, 190);
 	bgGirls.scrollFactor.set(0.9, 0.9);
 
-	if (PlayState.SONG.song.toLowerCase() == 'roses')
-		bgGirls.getScared();
-
-	bgGirls.setGraphicSize(Std.int(bgGirls.width * daPixelZoom));
+	bgGirls.setGraphicSize(Std.int(bgGirls.width * PlayState.daPixelZoom));
 	bgGirls.updateHitbox();
 	game.add(bgGirls);
+
+	if (curSong == 'roses') {
+		bgGirls.getScared();
+		bgGirls.dance();
+	}
 }
 
 function createStageFront() {
 	game.gf.x += 180;
-	game.gf.y += 300;
+	game.gf.y += 300;	
 } 
 
 function beatHit(curBeat) {

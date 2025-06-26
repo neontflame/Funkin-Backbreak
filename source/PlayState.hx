@@ -265,37 +265,15 @@ class PlayState extends MusicBeatState {
 		dad = new Character(100, 100, SONG.player2);
 		dad.typeOfChar = 'dad';
 		
-		camPos = new FlxPoint(dad.getGraphicMidpoint().x, dad.getGraphicMidpoint().y);
+		camPos = new FlxPoint(dad.getGraphicMidpoint().x + dad.camOffset[0], dad.getGraphicMidpoint().y + dad.camOffset[1]);
 		boyfriend = new Character(770, 450, SONG.player1, true);
 		boyfriend.typeOfChar = 'bf';
-
-		// set the dad's position (check the stage class to edit that!)
-		// reminder that this probably isn't the best way to do this but hey it works I guess and is cleaner
-		// todo: make this go on character scripts
-		stageBuild.dadPosition(curStage, dad, gf, camPos, SONG.player2);
 
 		stageBuild.createStageBack();
 		
 		gf = new Character(400, 130, stageBuild.returnGFtype(curStage));
 		gf.typeOfChar = 'gf';
 		gf.scrollFactor.set(0.95, 0.95);
-		
-		if (stageBuild.returnGFtype(curStage) == 'pico-speaker') {
-			var tankmen:TankmenBG = new TankmenBG(20, 500, true);
-			tankmen.strumTime = 10;
-			tankmen.resetShit(20, 600, true);
-			stageBuild.tankmanRun.add(tankmen);
-
-			for (i in 0...TankmenBG.animationNotes.length) {
-				if (!FlxG.random.bool(16))
-					continue;
-
-				var man:TankmenBG = stageBuild.tankmanRun.recycle(TankmenBG);
-				man.strumTime = TankmenBG.animationNotes[i][0];
-				man.resetShit(500, 200 + FlxG.random.int(50, 100), TankmenBG.animationNotes[i][1] < 2);
-				stageBuild.tankmanRun.add(man);
-			}
-		}
 
 		add(gf);
 
@@ -510,76 +488,6 @@ class PlayState extends MusicBeatState {
 			trace('[PLAYSTATE] No video support :(');
 		#end
 		
-	}
-
-	function schoolIntro(?dialogueBox:DialogueBox):Void {
-		var black:FlxSprite = new FlxSprite(-100, -100).makeGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
-		black.scrollFactor.set();
-		add(black);
-
-		var red:FlxSprite = new FlxSprite(-100, -100).makeGraphic(FlxG.width * 2, FlxG.height * 2, 0xFFff1b31);
-		red.scrollFactor.set();
-
-		var senpaiEvil:FlxSprite = new FlxSprite();
-		senpaiEvil.frames = Paths.getSparrowAtlas('weeb/senpaiCrazy');
-		senpaiEvil.animation.addByPrefix('idle', 'Senpai Pre Explosion', 24, false);
-		senpaiEvil.setGraphicSize(Std.int(senpaiEvil.width * daPixelZoom));
-		senpaiEvil.scrollFactor.set();
-		senpaiEvil.updateHitbox();
-		senpaiEvil.screenCenter();
-		senpaiEvil.x += senpaiEvil.width / 5;
-
-		camFollow.setPosition(camPos.x, camPos.y);
-
-		if (SONG.song.toLowerCase() == 'roses' || SONG.song.toLowerCase() == 'thorns') {
-			remove(black);
-
-			if (SONG.song.toLowerCase() == 'thorns') {
-				add(red);
-				camHUD.visible = false;
-			}
-		}
-
-		new FlxTimer().start(0.3, function(tmr:FlxTimer) {
-			black.alpha -= 0.15;
-
-			if (black.alpha > 0) {
-				tmr.reset(0.3);
-			} else {
-				if (dialogueBox != null) {
-					inCutscene = true;
-
-					if (SONG.song.toLowerCase() == 'thorns') {
-						add(senpaiEvil);
-						senpaiEvil.alpha = 0;
-						new FlxTimer().start(0.3, function(swagTimer:FlxTimer) {
-							senpaiEvil.alpha += 0.15;
-							if (senpaiEvil.alpha < 1) {
-								swagTimer.reset();
-							} else {
-								senpaiEvil.animation.play('idle');
-								FlxG.sound.play(Paths.sound('Senpai_Dies'), 1, false, null, true, function() {
-									remove(senpaiEvil);
-									remove(red);
-									FlxG.camera.fade(FlxColor.WHITE, 0.01, true, function() {
-										add(dialogueBox);
-										camHUD.visible = true;
-									}, true);
-								});
-								new FlxTimer().start(3.2, function(deadTime:FlxTimer) {
-									FlxG.camera.fade(FlxColor.WHITE, 1.6, false);
-								});
-							}
-						});
-					} else {
-						add(dialogueBox);
-					}
-				} else
-					startCountdown();
-
-				remove(black);
-			}
-		});
 	}
 
 	var startTimer:FlxTimer = new FlxTimer();

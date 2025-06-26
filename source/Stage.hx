@@ -1,9 +1,5 @@
 package;
 
-#if USE_SHADERS
-import shaders.BuildingShaders;
-import shaders.ColorSwap;
-#end
 import animate.FlxAnimate;
 import flixel.FlxCamera;
 import flixel.FlxG;
@@ -52,7 +48,7 @@ class Stage extends FlxTypedGroup<FlxBasic> {
 		switch (CoolUtil.spaceToDash(PlayState.SONG.song.toLowerCase())) {
 			case 'spookeez' | 'south' | 'monster':
 				curStage = 'spooky';
-			case 'pico' | 'blammed' | 'philly-nice':
+			case 'pico' | 'blammed' | 'philly-nice' | 'philly':
 				curStage = 'philly';
 			case 'milf' | 'satin-panties' | 'high':
 				curStage = 'limo';
@@ -80,28 +76,12 @@ class Stage extends FlxTypedGroup<FlxBasic> {
 			stageScript.addByPath(file);
 			stageScript.setup();
 			stageScript.set('stage', this);
+			stageScript.set('BackgroundDancer', BackgroundDancer);
+			stageScript.set('BackgroundGirls', BackgroundGirls);
+			stageScript.set('TankmenBG', TankmenBG);
+			stageScript.set('game', PlayState.instance);
 		}
 	}
-
-	// todo: move these giant switch statements and their variables to individual scripts
-	// decluttering my behated
-
-	var phillyCityLights:FlxTypedGroup<FlxSprite>;
-	var phillyTrain:FlxSprite;
-	var trainSound:FlxSound;
-	#if USE_SHADERS
-	var lightFadeShader:BuildingShaders;
-	#end
-
-	public var limo:FlxSprite;
-	public var grpLimoDancers:FlxTypedGroup<BackgroundDancer>;
-
-	var fastCar:FlxSprite;
-
-	var tankWatchtower:BGSprite;
-	var tankGround:BGSprite;
-
-	public var tankmanRun:FlxTypedGroup<TankmenBG>;
 
 	public function createStageBack() {
 		var boyfriend:Character = PlayState.instance.boyfriend;
@@ -111,396 +91,31 @@ class Stage extends FlxTypedGroup<FlxBasic> {
 		stageScript.set('gf', gf);
 		stageScript.set('dad', dad);
 		
-		switch (PlayState.curStage) {
-			case 'philly':
-				curStage = 'philly';
-
-				var bg:FlxSprite = new FlxSprite(-100).loadGraphic(Paths.image('backgrounds/' + curStage + '/sky'));
-				bg.scrollFactor.set(0.1, 0.1);
-				add(bg);
-
-				var city:FlxSprite = new FlxSprite(-10).loadGraphic(Paths.image('backgrounds/' + curStage + '/city'));
-				city.scrollFactor.set(0.3, 0.3);
-				city.setGraphicSize(Std.int(city.width * 0.85));
-				city.updateHitbox();
-				add(city);
-
-				#if USE_SHADERS
-				lightFadeShader = new BuildingShaders();
-				#end
-				phillyCityLights = new FlxTypedGroup<FlxSprite>();
-				add(phillyCityLights);
-
-				for (i in 0...5) {
-					var light:FlxSprite = new FlxSprite(city.x).loadGraphic(Paths.image('backgrounds/' + curStage + '/win' + i));
-					light.scrollFactor.set(0.3, 0.3);
-					light.visible = false;
-					light.setGraphicSize(Std.int(light.width * 0.85));
-					light.updateHitbox();
-					#if USE_SHADERS
-					light.shader = lightFadeShader.shader;
-					#end
-					phillyCityLights.add(light);
-				}
-
-				var streetBehind:FlxSprite = new FlxSprite(-40, 50).loadGraphic(Paths.image('backgrounds/' + curStage + '/behindTrain'));
-				add(streetBehind);
-
-				phillyTrain = new FlxSprite(2000, 360).loadGraphic(Paths.image('backgrounds/' + curStage + '/train'));
-				add(phillyTrain);
-
-				trainSound = new FlxSound().loadEmbedded(Paths.sound('train_passes'));
-				FlxG.sound.list.add(trainSound);
-
-				var street:FlxSprite = new FlxSprite(-40, streetBehind.y).loadGraphic(Paths.image('backgrounds/' + curStage + '/street'));
-				add(street);
-				// var cityLights:FlxSprite = new FlxSprite().loadGraphic(AssetPaths.win0.png);
-
-				var street:FlxSprite = new FlxSprite(-40, streetBehind.y).loadGraphic(Paths.image('backgrounds/' + curStage + '/street'));
-				add(street);
-			case 'limo':
-				boyfriend.y -= 220;
-				boyfriend.x += 260;
-				
-				curStage = 'limo';
-				PlayState.defaultCamZoom = 0.90;
-
-				var skyBG:FlxSprite = new FlxSprite(-120, -50).loadGraphic(Paths.image('backgrounds/' + curStage + '/limoSunset'));
-				skyBG.scrollFactor.set(0.1, 0.1);
-				add(skyBG);
-
-				var bgLimo:FlxSprite = new FlxSprite(-200, 480);
-				bgLimo.frames = Paths.getSparrowAtlas('backgrounds/' + curStage + '/bgLimo');
-				bgLimo.animation.addByPrefix('drive', "background limo pink", 24);
-				bgLimo.animation.play('drive');
-				bgLimo.scrollFactor.set(0.4, 0.4);
-				add(bgLimo);
-
-				grpLimoDancers = new FlxTypedGroup<BackgroundDancer>();
-				add(grpLimoDancers);
-
-				for (i in 0...5) {
-					var dancer:BackgroundDancer = new BackgroundDancer((370 * i) + 130, bgLimo.y - 400);
-					dancer.scrollFactor.set(0.4, 0.4);
-					grpLimoDancers.add(dancer);
-				}
-
-				var overlayShit:FlxSprite = new FlxSprite(-500, -600).loadGraphic(Paths.image('backgrounds/' + curStage + '/limoOverlay'));
-				overlayShit.alpha = 0.5;
-				// add(overlayShit);
-
-				// var shaderBullshit = new BlendModeEffect(new OverlayShader(), FlxColor.RED);
-
-				// FlxG.camera.setFilters([new ShaderFilter(cast shaderBullshit.shader)]);
-
-				// overlayShit.shader = shaderBullshit;
-
-
-				fastCar = new FlxSprite(-300, 160).loadGraphic(Paths.image('backgrounds/' + curStage + '/fastCarLol'));
-			// loadArray.add(limo);
-			case 'tank':
-				gf.y += 10;
-				gf.x -= 30;
-				boyfriend.x += 40;
-				boyfriend.y += 0;
-				dad.y += 60;
-				dad.x -= 80;
-
-				if (gfVersion != 'pico-speaker') {
-					gf.x -= 170;
-					gf.y -= 75;
-				} else {
-					gf.x -= 50;
-					gf.y -= 200;
-				}
-				
-				PlayState.defaultCamZoom = 0.9;
-
-				curStage = 'tank';
-
-				var sky:BGSprite = new BGSprite('backgrounds/' + curStage + '/tankSky', -400, -400, [0, 0]);
-				add(sky);
-
-				var clouds:BGSprite = new BGSprite('backgrounds/' + curStage + '/tankClouds', FlxG.random.int(-700, -100), FlxG.random.int(-20, 20),
-					[0.1, 0.1]);
-				clouds.velocity.x = FlxG.random.float(5, 15);
-				add(clouds);
-
-				var mountains:BGSprite = new BGSprite('backgrounds/' + curStage + '/tankMountains', -300, -20, [0.2, 0.2]);
-				mountains.setGraphicSize(Std.int(mountains.width * 1.2));
-				mountains.updateHitbox();
-				add(mountains);
-
-				var buildings:BGSprite = new BGSprite('backgrounds/' + curStage + '/tankBuildings', -200, 0, [0.3, 0.3]);
-				buildings.setGraphicSize(Std.int(buildings.width * 1.1));
-				buildings.updateHitbox();
-				add(buildings);
-
-				var ruins:BGSprite = new BGSprite('backgrounds/' + curStage + '/tankRuins', -200, 0, [0.35, 0.35]);
-				ruins.setGraphicSize(Std.int(ruins.width * 1.1));
-				ruins.updateHitbox();
-				add(ruins);
-
-				var smokeL:BGSprite = new BGSprite('backgrounds/' + curStage + '/smokeLeft', -200, -100, [0.4, 0.4], ['SmokeBlurLeft'], true);
-				add(smokeL);
-
-				var smokeR:BGSprite = new BGSprite('backgrounds/' + curStage + '/smokeRight', 1100, -100, [0.4, 0.4], ['SmokeRight'], true);
-				add(smokeR);
-
-				tankWatchtower = new BGSprite('backgrounds/' + curStage + '/tankWatchtower', 100, 50, [0.5, 0.5], ['watchtower gradient color']);
-				add(tankWatchtower);
-
-				tankGround = new BGSprite('backgrounds/' + curStage + '/tankRolling', 300, 300, [0.5, 0.5], ['BG tank w lighting'], true);
-				add(tankGround);
-
-				tankmanRun = new FlxTypedGroup<TankmenBG>();
-				add(tankmanRun);
-
-				var ground:BGSprite = new BGSprite('backgrounds/' + curStage + '/tankGround', -420, -150);
-				ground.setGraphicSize(Std.int(ground.width * 1.15));
-				ground.updateHitbox();
-				add(ground);
-				moveTank();
-
-			case 'stage':
-				PlayState.defaultCamZoom = 0.9;
-				curStage = 'stage';
-				var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(Paths.image('backgrounds/' + curStage + '/stageback'));
-				bg.scrollFactor.set(0.9, 0.9);
-				bg.active = false;
-
-				// add to the final array
-				add(bg);
-
-				var stageFront:FlxSprite = new FlxSprite(-650, 600).loadGraphic(Paths.image('backgrounds/' + curStage + '/stagefront'));
-				stageFront.setGraphicSize(Std.int(stageFront.width * 1.1));
-				stageFront.updateHitbox();
-				stageFront.scrollFactor.set(0.9, 0.9);
-				stageFront.active = false;
-
-				// add to the final array
-				add(stageFront);
-
-				var stageCurtains:FlxSprite = new FlxSprite(-500, -300).loadGraphic(Paths.image('backgrounds/' + curStage + '/stagecurtains'));
-				stageCurtains.setGraphicSize(Std.int(stageCurtains.width * 0.9));
-				stageCurtains.updateHitbox();
-				stageCurtains.scrollFactor.set(1.3, 1.3);
-				stageCurtains.active = false;
-
-				// add to the final array
-				add(stageCurtains);
-		}
-		
 		stageScript.call('createStageBack');
 	}
 	
 	public function createStageMiddle() {
-		switch (curStage) {
-			case 'limo':
-				var limoTex = Paths.getSparrowAtlas('backgrounds/' + curStage + '/limoDrive');
-
-				limo = new FlxSprite(-120, 550);
-				limo.frames = limoTex;
-				limo.animation.addByPrefix('drive', "Limo stage", 24);
-				limo.animation.play('drive');
-				add(limo);
-		}
 		stageScript.call('createStageMiddle');
 	}
 	
 	public function createStageFront() {
-		switch (curStage) {
-			case 'tank':
-				var tankdude0:BGSprite = new BGSprite('backgrounds/' + curStage + '/tank0', -500, 650, [1.7, 1.5], ['fg']);
-				add(tankdude0);
-
-				var tankdude1:BGSprite = new BGSprite('backgrounds/' + curStage + '/tank1', -300, 750, [2, 0.2], ['fg']);
-				add(tankdude1);
-
-				var tankdude2:BGSprite = new BGSprite('backgrounds/' + curStage + '/tank2', 450, 940, [1.5, 1.5], ['foreground']);
-				add(tankdude2);
-
-				var tankdude4:BGSprite = new BGSprite('backgrounds/' + curStage + '/tank4', 1300, 900, [1.5, 1.5], ['fg']);
-				add(tankdude4);
-
-				var tankdude5:BGSprite = new BGSprite('backgrounds/' + curStage + '/tank5', 1620, 700, [1.5, 1.5], ['fg']);
-				add(tankdude5);
-
-				var tankdude3:BGSprite = new BGSprite('backgrounds/' + curStage + '/tank3', 1300, 1200, [3.5, 2.5], ['fg']);
-				add(tankdude3);
-		}
 		stageScript.call('createStageFront');
 	}
 	
 	// return the girlfriend's type
 	public function returnGFtype(curStage) {
-		switch (curStage) {
-			case 'limo':
-				gfVersion = 'gf-car';
-			case 'tank':
-				gfVersion = 'gf-tankmen';
-		}
-
-		if (PlayState.SONG.song.toLowerCase() == 'stress')
-			gfVersion = 'pico-speaker';
-
 		return gfVersion;
 	}
 
-	// get the dad's position
-	public function dadPosition(curStage, dad:Character, gf:Character, camPos:FlxPoint, songPlayer2):Void {
-		// here lie the miserable remains of a switch statement
-		// cause of death: softcoding
-		/*
-		switch (songPlayer2) {
-			
-				if (isStoryMode)
-				{
-					camPos.x += 600;
-					tweenCamIn();
-			}
-			case 'tankman':
-		}
-		*/
-	}
-
-	var curLight:Int = 0;
-	var trainMoving:Bool = false;
-	var trainFrameTiming:Float = 0;
-
-	var trainCars:Int = 8;
-	var trainFinishing:Bool = false;
-	var trainCooldown:Int = 0;
-	var startedMoving:Bool = false;
-
-	var tankResetShit:Bool = false;
-	var tankMoving:Bool = false;
-	var tankAngle:Float = FlxG.random.int(-90, 45);
-	var tankSpeed:Float = FlxG.random.float(5, 7);
-	var tankX:Float = 400;
 
 	public function stageUpdate(curBeat:Int, boyfriend:Character, gf:Character, dad:Character) {
 		stageScript.call('beatHit', [curBeat]);
-		// trace('update backgrounds');
-		switch (PlayState.curStage) {
-			case 'tank':
-				tankWatchtower.dance();
-			case 'limo':
-				// trace('highway update');
-				grpLimoDancers.forEach(function(dancer:BackgroundDancer) {
-					dancer.dance();
-				});
-			case 'philly':
-				if (!trainMoving)
-					trainCooldown += 1;
-
-				if (curBeat % 4 == 0) {
-					var lastLight:FlxSprite = phillyCityLights.members[0];
-
-					phillyCityLights.forEach(function(light:FlxSprite) {
-						// Take note of the previous light
-						if (light.visible == true)
-							lastLight = light;
-
-						light.visible = false;
-					});
-
-					// To prevent duplicate lights, iterate until you get a matching light
-					while (lastLight == phillyCityLights.members[curLight]) {
-						curLight = FlxG.random.int(0, phillyCityLights.length - 1);
-					}
-
-					phillyCityLights.members[curLight].visible = true;
-					#if USE_SHADERS
-					lightFadeShader.reset();
-					#else
-					phillyCityLights.members[curLight].alpha = 1;
-					#end
-
-					FlxTween.tween(phillyCityLights.members[curLight], {alpha: 0}, Conductor.stepCrochet * .016);
-				}
-
-				if (curBeat % 8 == 4 && FlxG.random.bool(30) && !trainMoving && trainCooldown > 8) {
-					trainCooldown = FlxG.random.int(-4, 0);
-					trainStart();
-				}
-		}
 	}
 
 	public function stageUpdateConstant(elapsed:Float, boyfriend:Character, gf:Character, dad:Character) {
 		stageScript.call('update', [elapsed]);
-
-		switch (PlayState.curStage) {
-			case 'philly':
-				if (trainMoving) {
-					trainFrameTiming += elapsed;
-
-					if (trainFrameTiming >= 1 / 24) {
-						updateTrainPos(gf);
-						trainFrameTiming = 0;
-					}
-				}
-
-				#if USE_SHADERS
-				lightFadeShader.update(1.5 * (Conductor.crochet / 1000) * FlxG.elapsed);
-				#else
-				phillyCityLights.members[curLight].alpha -= (Conductor.crochet / 1000) * FlxG.elapsed;
-				#end
-			case 'tank':
-				moveTank();
-		}
 	}
 
-	// PHILLY STUFFS!
-	function trainStart():Void {
-		trainMoving = true;
-		if (!trainSound.playing)
-			trainSound.play(true);
-	}
-
-	function updateTrainPos(gf:Character):Void {
-		if (trainSound.time >= 4700) {
-			startedMoving = true;
-			gf.playAnim('hairBlow');
-		}
-
-		if (startedMoving) {
-			phillyTrain.x -= 400;
-
-			if (phillyTrain.x < -2000 && !trainFinishing) {
-				phillyTrain.x = -1150;
-				trainCars -= 1;
-
-				if (trainCars <= 0)
-					trainFinishing = true;
-			}
-
-			if (phillyTrain.x < -4000 && trainFinishing)
-				trainReset(gf);
-		}
-	}
-
-	function trainReset(gf:Character):Void {
-		gf.playAnim('hairFall');
-		phillyTrain.x = FlxG.width + 200;
-		trainMoving = false;
-		// trainSound.stop();
-		// trainSound.time = 0;
-		trainCars = 8;
-		trainFinishing = false;
-		startedMoving = false;
-	}
-
-	// TANK SHIT
-
-	function moveTank():Void {
-		if (!PlayState.inCutscene) {
-			tankAngle += tankSpeed * FlxG.elapsed;
-			tankGround.angle = (tankAngle - 90 + 15);
-			tankGround.x = tankX + 1500 * Math.cos(Math.PI / 180 * (1 * tankAngle + 180));
-			tankGround.y = 1300 + 1100 * Math.sin(Math.PI / 180 * (1 * tankAngle + 180));
-		}
-	}
 
 	override function add(Object:FlxBasic):FlxBasic {
 		stageScript.set('add', this);

@@ -10,7 +10,7 @@ function createCharacter() {
 	char.playAnim('firstDeath');
 	// pixel bullshit
 	char.setGraphicSize(Std.int(char.width * 6));
-	char.updateHitbox();
 	char.antialiasing = false;
 	char.flipX = true;
+	char.updateHitbox();
 }
