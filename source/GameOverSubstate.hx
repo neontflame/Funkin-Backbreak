@@ -12,7 +12,7 @@ class GameOverSubstate extends MusicBeatSubstate {
 	var bf:Character;
 	var camFollow:FlxObject;
 
-	public var stageSuffix:String = '';
+	public static var stageSuffix:String = '';
 
 	var randomGameover:Int = 1;
 	var playingDeathSound:Bool = false;
@@ -33,7 +33,7 @@ class GameOverSubstate extends MusicBeatSubstate {
 		bf = new Character(x, y, daBf, true);
 		add(bf);
 
-		camFollow = new FlxObject(bf.getGraphicMidpoint().x, bf.getGraphicMidpoint().y, 1, 1);
+		camFollow = new FlxObject(bf.getGraphicMidpoint().x + bf.camOffset[0], bf.getGraphicMidpoint().y + bf.camOffset[1], 1, 1);
 		add(camFollow);
 
 		FlxG.sound.play(Paths.sound('fnf_loss_sfx' + stageSuffix));
@@ -65,7 +65,8 @@ class GameOverSubstate extends MusicBeatSubstate {
 			PlayState.seenCutscene = false;
 
 			FlxG.sound.music.stop();
-
+			stageSuffix = '';
+			
 			if (PlayState.isStoryMode)
 				FlxG.switchState(new StoryMenuState());
 			else
@@ -113,6 +114,7 @@ class GameOverSubstate extends MusicBeatSubstate {
 			bf.playAnim('deathConfirm', true);
 			FlxG.sound.music.stop();
 			FlxG.sound.play(Paths.music('gameOverEnd' + stageSuffix));
+			stageSuffix = '';
 			new FlxTimer().start(0.7, function(tmr:FlxTimer) {
 				FlxG.camera.fade(FlxColor.BLACK, 2, false, function() {
 					LoadingState.loadAndSwitchState(new PlayState());
