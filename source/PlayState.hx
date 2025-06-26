@@ -37,6 +37,8 @@ import backend.IrisHandler;
 import backend.EventTimeline;
 import bg.*;
 
+import modchart.Manager;
+
 #if html5
 import video.FlxVideo;
 #end
@@ -70,8 +72,8 @@ class PlayState extends MusicBeatState {
 	public var gf:Character;
 	public var boyfriend:Character;
 
-	private var notes:FlxTypedGroup<Note>;
-	private var unspawnNotes:Array<Note> = [];
+	public var notes:FlxTypedGroup<Note>;
+	public var unspawnNotes:Array<Note> = [];
 
 	private var strumLine:FlxSprite;
 	private var curSection:Int = 0;
@@ -83,6 +85,7 @@ class PlayState extends MusicBeatState {
 
 	public var strumLineNotes:FlxTypedGroup<NoteStrum>;
 	public var playerStrums:FlxTypedGroup<NoteStrum>;
+	public var enemyStrums:FlxTypedGroup<NoteStrum>;
 
 	private var grpNoteSplashes:FlxTypedGroup<NoteSplash>;
 
@@ -106,9 +109,9 @@ class PlayState extends MusicBeatState {
 
 	private var iconP1:HealthIcon;
 	private var iconP2:HealthIcon;
-	private var camHUD:FlxCamera;
-	private var camOther:FlxCamera;
-	private var camGame:FlxCamera;
+	public var camHUD:FlxCamera;
+	public var camOther:FlxCamera;
+	public var camGame:FlxCamera;
 
 	var dialogue:Array<String> = ['blah blah blah', 'coolswag'];
 
@@ -142,6 +145,8 @@ class PlayState extends MusicBeatState {
 	
 	// lifted from Funkin-Multikey you get the gist by now
 	var script:IrisHandler;
+	
+	var modManager:Manager;
 
 	override public function create() {
 		instance = this;
@@ -314,6 +319,7 @@ class PlayState extends MusicBeatState {
 		add(grpNoteSplashes);
 
 		playerStrums = new FlxTypedGroup<NoteStrum>();
+		enemyStrums = new FlxTypedGroup<NoteStrum>();
 
 		generateSong();
 
@@ -580,7 +586,6 @@ class PlayState extends MusicBeatState {
 
 	function startCountdown():Void {
 		//Paths.clearUnusedMemory();
-		allScriptCall("startCountdown");
 		
 		inCutscene = false;
 
@@ -588,6 +593,10 @@ class PlayState extends MusicBeatState {
 
 		generateStaticArrows(0);
 		generateStaticArrows(1);
+		
+		modManager = new Manager();
+		add(modManager);
+		script.set('modManager', modManager);
 
 		talking = false;
 		startedCountdown = true;
@@ -596,6 +605,7 @@ class PlayState extends MusicBeatState {
 
 		var swagCounter:Int = 0;
 
+		allScriptCall("startCountdown");
 		startTimer.start(Conductor.crochet / 1000, function(tmr:FlxTimer) {
 			if (swagCounter % gfSpeed == 0) {
 				gf.dance();
@@ -744,6 +754,8 @@ class PlayState extends MusicBeatState {
 
 		notes = new FlxTypedGroup<Note>();
 		add(notes);
+		
+		notes.visible = false;
 
 		var noteData:Array<SwagSection>;
 

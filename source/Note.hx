@@ -18,6 +18,7 @@ class Note extends FlxSprite {
 
 	public var sustainLength:Float = 0;
 	public var isSustainNote:Bool = false;
+	public var isSustainEnd:Bool = true;
 
 	var colorSwap:ColorSwap;
 
@@ -141,6 +142,8 @@ class Note extends FlxSprite {
 				x += 30;
 
 			if (prevNote.isSustainNote) {
+				prevNote.isSustainEnd = false;
+				
 				switch (prevNote.noteData) {
 					case 0:
 						prevNote.animation.play('purplehold');

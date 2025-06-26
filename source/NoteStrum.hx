@@ -88,6 +88,8 @@ class NoteStrum extends FlxSprite {
 					}
 				}
 			}
+		} else {
+			PlayState.instance.enemyStrums.add(this);
 		}
 			
 		animation.play('static');

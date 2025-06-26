@@ -67,6 +67,11 @@ foi<?xml version="1.0" encoding="utf-8"?>
 	<!-- <haxelib name="polymod" /> -->
 	<haxelib name="discord_rpc" if="cpp" />
 
+	<haxedef name="FM_ENGINE" value="BACKBREAK"/>
+	<haxedef name="FM_ENGINE_VERSION" value="1.0.0"/>
+
+	<haxelib name="funkin-modchart" />
+	<haxeflag name="--macro" value="modchart.core.macros.Macro.includeFiles()"/>
 	<!-- _________________________________ Custom _______________________________ -->
 	
 	<icon path="art/icon16.png" size='16'/>
@@ -74,6 +79,5 @@ foi<?xml version="1.0" encoding="utf-8"?>
 	<icon path="art/icon64.png" size='64'/>
 	<icon path="art/iconOG.png" />
 	
-	<define name="WEEKSEVEN" />
 	
 </project>
