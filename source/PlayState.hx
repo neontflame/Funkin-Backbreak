@@ -1391,7 +1391,7 @@ class PlayState extends MusicBeatState {
 		
 		var coolTheme:String = (curStage.startsWith('school') ? 'pixel' : 'default');
 
-		rating.loadGraphic(Paths.image(getRatingPath('ratings', daRating, coolTheme)));
+		rating.loadGraphic(getRatingPath('ratings', daRating, coolTheme));
 		rating.screenCenter();
 		rating.x = coolText.x;
 		rating.y -= 60;
@@ -1401,7 +1401,7 @@ class PlayState extends MusicBeatState {
 		
 		rating.cameras = [camHUD];
 		
-		var comboSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image(getRatingPath('', 'combo', coolTheme)));
+		var comboSpr:FlxSprite = new FlxSprite().loadGraphic(getRatingPath('', 'combo', coolTheme));
 		comboSpr.screenCenter();
 		comboSpr.x = coolText.x;
 		comboSpr.acceleration.y = 600;
@@ -1435,7 +1435,7 @@ class PlayState extends MusicBeatState {
 		var daLoop:Int = 0;
 		var prevWidth:Float = 0;
 		for (i in seperatedScore) {
-			var numScore:FlxSprite = new FlxSprite().loadGraphic(Paths.image(getRatingPath('numbers', 'num' + Std.int(i), coolTheme)));
+			var numScore:FlxSprite = new FlxSprite().loadGraphic(getRatingPath('numbers', 'num' + Std.int(i), coolTheme));
 			numScore.screenCenter();
 			// numScore.y += 80;
 
