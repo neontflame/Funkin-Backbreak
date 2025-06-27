@@ -139,8 +139,7 @@ class PlayState extends MusicBeatState {
 
 	private var stageBuild:Stage;
 	
-	// lifted from Funkin-Multikey you get the gist by now
-	var script:IrisHandler;
+	var script:IrisHandler; // lifted from Funkin-Multikey you get the gist by now
 	
 	var modManager:Manager;
 
@@ -441,7 +440,7 @@ class PlayState extends MusicBeatState {
 		add(black);
 		
 		#if html5
-		midsongVideo:FlxVideo = new FlxVideo(path).finishCallback = function() {
+		midsongVideo = new FlxVideo(path).finishCallback = function() {
 			remove(black);
 			FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, (Conductor.stepCrochet / 1000) * 5, {ease: FlxEase.quadInOut});
 		};
@@ -1274,7 +1273,7 @@ class PlayState extends MusicBeatState {
 
 		if (doSplash) {
 			var splash:NoteSplash = grpNoteSplashes.recycle(NoteSplash);
-			splash.setupNoteSplash(daNote.x, strumLine.y, daNote.noteData);
+			splash.setupNoteSplash(daNote.x, strumLineNotes.members[daNote.noteData + 4].y, daNote.noteData);
 			grpNoteSplashes.add(splash);
 		}
 

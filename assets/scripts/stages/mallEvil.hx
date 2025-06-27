@@ -1,5 +1,6 @@
 function createStageBack() {
 	var game = PlayState.instance;
+	PlayState.defaultCamZoom = 1.05;
 	
 	stage.gfVersion = 'gf-christmas';
 	

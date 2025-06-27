@@ -10,6 +10,7 @@ function endSongPost(difficulty) {
 	var blackShit:FlxSprite = new FlxSprite(-FlxG.width * FlxG.camera.zoom,
 		-FlxG.height * FlxG.camera.zoom).makeGraphic(FlxG.width * 3, FlxG.height * 3, 0xFF000000);
 	blackShit.scrollFactor.set();
+	blackShit.cameras = [game.camOther];
 	game.add(blackShit);
 	game.camHUD.visible = false;
 

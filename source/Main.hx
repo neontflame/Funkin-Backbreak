@@ -14,6 +14,8 @@ class Main extends Sprite {
 	var framerate:Int = 60; // How many frames per second the game should run at.
 	var skipSplash:Bool = true; // Whether to skip the flixel splash screen that appears in release mode.
 	var startFullscreen:Bool = false; // Whether to start the game in fullscreen on desktop targets
+	
+	public static var engineVer:String = '1.0.0'; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
 
 	public static var fpsCounter:FPS;
 

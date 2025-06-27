@@ -76,19 +76,18 @@ function createStageBack() {
 	
 	if (stage.gfVersion == 'pico-speaker') {
 		var tankmen:TankmenBG = new TankmenBG(20, 500, true);
-		trace(tankmen);
 		tankmen.strumTime = 10;
 		tankmen.resetShit(20, 600, true);
 		tankmanRun.add(tankmen);
 
 		for (i in 0...TankmenBG.animationNotes.length) {
-			if (!FlxG.random.bool(16))
-				continue;
-
-			var man:TankmenBG = tankmanRun.recycle(TankmenBG);
-			man.strumTime = TankmenBG.animationNotes[i][0];
-			man.resetShit(500, 200 + FlxG.random.int(50, 100), TankmenBG.animationNotes[i][1] < 2);
-			tankmanRun.add(man);
+			var thing = FlxG.random.bool(16);
+			if (!thing){
+				var man:TankmenBG = tankmanRun.recycle(TankmenBG);
+				man.strumTime = TankmenBG.animationNotes[i][0];
+				man.resetShit(500, 200 + FlxG.random.int(50, 100), TankmenBG.animationNotes[i][1] < 2);
+				tankmanRun.add(man);
+			}
 		}
 	}
 }

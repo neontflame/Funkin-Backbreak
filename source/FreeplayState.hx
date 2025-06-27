@@ -55,12 +55,10 @@ class FreeplayState extends MusicBeatState {
 			itemCount += 1;
 			
 			#if sys
-			var weekXml:Xml = Xml.parse(
-			File.getContent(weekPath)
+			var weekXml:Xml = Xml.parse(File.getContent(weekPath));
 			#else
-			OpenFlAssets.getText(weekPath)
+			var weekXml:Xml = Xml.parse(Assets.getText(weekPath));
 			#end
-			);
 			
 			// week parser!
 			var root:Xml = weekXml.firstElement();

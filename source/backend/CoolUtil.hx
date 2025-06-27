@@ -105,7 +105,18 @@ class CoolUtil {
 		#if sys
 		var items:Array<String> = FileSystem.readDirectory(path);
 		#elseif openfl
-		var items:Array<String> = OpenFLAssets.list(path);
+		var items:Array<String> = [];
+		var allAssets = openfl.Assets.list();
+
+		for (id in allAssets) {
+			if (id.startsWith(path + "/")) {
+				var relative = id.substr((path + "/").length);
+				// Only include if it's not in a subfolder
+				if (!relative.contains("/")) {
+					items.push(relative);
+				}
+			}
+		}
 		#end
 		
 		return items;

@@ -21,8 +21,8 @@ class IrisHandler {
 
 
 	public function loadFolder(folder:String):Void {
-		if (!CoolUtil.fileExists('$path/$folder')) return;
-		var items:Array<String> = CoolUtil.readDir('$path/$folder');
+		if (!CoolUtil.fileExists(path + '/' + folder)) return;
+		var items:Array<String> = CoolUtil.readDir(path + '/' + folder);
 		for (item in items) {
 			var extCount:Int = 0;
 			
