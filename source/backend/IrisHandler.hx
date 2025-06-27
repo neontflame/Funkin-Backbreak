@@ -100,6 +100,8 @@ class IrisHandler {
 		set('FlxSpriteUtil', flixel.util.FlxSpriteUtil);
 		set("FlxBackdrop", flixel.addons.display.FlxBackdrop);
 		set("FlxTiledSprite", flixel.addons.display.FlxTiledSprite);
+		
+		set("FlxAnimate", flxanimate.FlxAnimate);
 
 		set("add", FlxG.state.add);
 		set("remove", FlxG.state.remove);

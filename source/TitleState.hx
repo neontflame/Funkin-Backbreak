@@ -193,8 +193,6 @@ class TitleState extends MusicBeatState {
 	override function update(elapsed:Float) {
 		if (FlxG.sound.music != null)
 			Conductor.songPosition = FlxG.sound.music.time;
-		if (FlxG.keys.justPressed.FIVE || FlxG.keys.justPressed.EIGHT)
-			FlxG.switchState(new CutsceneAnimTestState());
 
 		var gamepad:FlxGamepad = FlxG.gamepads.lastActive;
 		var pressedEnter:Bool = gamepad != null ? FlxG.keys.justPressed.ENTER || gamepad.justPressed.START : FlxG.keys.justPressed.ENTER;

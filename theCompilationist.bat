@@ -13,7 +13,7 @@ haxelib set hxvlc 2.1.4
 haxelib set hxcpp 4.3.2
 haxelib set hscript-iris 1.1.3
 haxelib git flxanimate https://github.com/FixedData/flxanimate
-haxelib git funkin-modchart https://github.com/TheoDevelops/FunkinModchart
+haxelib set funkin-modchart 1.2.0
 echo Building game
 title Backbreak Engine Compile Helper - Building game
 lime test windows

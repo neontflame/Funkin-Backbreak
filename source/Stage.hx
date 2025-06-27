@@ -1,6 +1,5 @@
 package;
 
-import animate.FlxAnimate;
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -36,7 +35,7 @@ class Stage extends FlxTypedGroup<FlxBasic> {
 
 	var daPixelZoom = PlayState.daPixelZoom;
 
-	var gfVersion:String = 'gf';
+	public var gfVersion:String = 'gf';
 
 	public function new(curStage) {
 		super();
@@ -101,12 +100,6 @@ class Stage extends FlxTypedGroup<FlxBasic> {
 	public function createStageFront() {
 		stageScript.call('createStageFront');
 	}
-	
-	// return the girlfriend's type
-	public function returnGFtype(curStage) {
-		return gfVersion;
-	}
-
 
 	public function stageUpdate(curBeat:Int, boyfriend:Character, gf:Character, dad:Character) {
 		stageScript.call('beatHit', [curBeat]);

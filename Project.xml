@@ -61,6 +61,7 @@ foi<?xml version="1.0" encoding="utf-8"?>
 
 	<haxelib name="hscript-iris" />
 	<define name="hscriptPos" />
+	<haxelib name="flxanimate" />
 	
 	<haxelib name="hxvlc" if="cpp"/>
 

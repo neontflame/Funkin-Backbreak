@@ -7,7 +7,6 @@ import Discord.DiscordClient;
 import shaders.BuildingShaders;
 import shaders.ColorSwap;
 #end
-import animate.FlxAnimate;
 import ui.PreferencesMenu;
 import backend.Section.SwagSection;
 import backend.Song.SwagSong;
@@ -117,9 +116,6 @@ class PlayState extends MusicBeatState {
 
 	var halloweenBG:FlxSprite;
 	var isHalloween:Bool = false;
-
-	var gfCutsceneLayer:FlxTypedGroup<FlxAnimate>;
-	var bfTankCutsceneLayer:FlxTypedGroup<FlxAnimate>;
 
 	var talking:Bool = true;
 	var songScore:Int = 0;
@@ -271,16 +267,11 @@ class PlayState extends MusicBeatState {
 
 		stageBuild.createStageBack();
 		
-		gf = new Character(400, 130, stageBuild.returnGFtype(curStage));
+		gf = new Character(400, 130, stageBuild.gfVersion);
 		gf.typeOfChar = 'gf';
 		gf.scrollFactor.set(0.95, 0.95);
 
 		add(gf);
-
-		gfCutsceneLayer = new FlxTypedGroup<FlxAnimate>();
-		add(gfCutsceneLayer);
-		bfTankCutsceneLayer = new FlxTypedGroup<FlxAnimate>();
-		add(bfTankCutsceneLayer);
 		
 		stageBuild.createStageMiddle();
 		
