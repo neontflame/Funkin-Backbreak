@@ -29,18 +29,11 @@ foi<?xml version="1.0" encoding="utf-8"?>
 
 	<classpath name="source" />
 	
-	<define name="PRELOAD_ALL" />
-	<define name="NO_PRELOAD_ALL" unless="PRELOAD_ALL"/>
-	
-	<section if="PRELOAD_ALL">
-	</section>
-	
-	<section if="NO_PRELOAD_ALL">
-	</section>
-	
-	<assets path="assets"/>
+	<assets path="assets" />
 	
 	<assets path='art/readme.txt' rename='do NOT readme.txt' />
+	
+	<assets path='example_mods' rename='mods' embed='false'/>
 	<!-- ______________________________ Defines _____________________________ -->
 
 	<define name="FLX_NO_FOCUS_LOST_SCREEN" />

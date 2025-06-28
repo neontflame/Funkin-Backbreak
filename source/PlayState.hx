@@ -1233,7 +1233,7 @@ class PlayState extends MusicBeatState {
 		return judgements.get(180);
 	}
 	
-	function getRatingPath(type:String, name:String, theme:String):String {
+	function getRatingPath(type:String, name:String, theme:String) {
 		var base = 'ui/ratingShit/';
 		var prefix:String = '';
 		var suffix:String = '';
@@ -1243,7 +1243,7 @@ class PlayState extends MusicBeatState {
 				prefix = 'pixelUI/';
 				suffix = '-pixel';
 		}
-		return Paths.image(base + prefix + (type != '' ? type + '/' : '') + name + suffix);
+		return Paths.imagePath(base + prefix + (type != '' ? type + '/' : '') + name + suffix);
 	}
 
 	private function popUpScore(strumtime:Float, daNote:Note):Void {

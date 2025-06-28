@@ -68,7 +68,15 @@ class TitleState extends MusicBeatState {
 			modList.push(item);
 		}
 		
-		polymod.Polymod.init({modRoot: './mods', dirs: modList, framework: OPENFL});
+		polymod.Polymod.init({
+			modRoot: 'mods', 
+			dirs: modList, 
+			framework: OPENFL, 
+			errorCallback: function(error:polymod.Polymod.PolymodError)
+			{
+				trace('[POLYMOD] ' + error.message);
+			}
+		});
 		#end
 		
 		#if USE_SHADERS
