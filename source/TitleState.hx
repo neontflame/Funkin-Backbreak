@@ -42,7 +42,7 @@ class TitleState extends MusicBeatState {
 	var lastBeat:Int = 0;
 	var skippedIntro:Bool = false;
 	var transitioning:Bool = false;
-
+	
 	#if USE_SHADERS
 	var swagShader:ColorSwap;
 	#end
@@ -52,17 +52,19 @@ class TitleState extends MusicBeatState {
 	var netStream:NetStream;
 	var overlay:Sprite;
 	#end
-
+	
+	public static var modList:Array<String> = [];
+	
 	override public function create():Void {
 		#if polymod
-		var modList:Array<String> = [];
+		modList = [];
 		
-		if (CoolUtil.fileExists('mods')) {
-			modList = CoolUtil.readDir('mods');
-			trace(modList);
+		for (i in polymod.Polymod.scan({modRoot: 'mods'})) {
+			modList.push(i.id);
 		}
 		
-		polymod.Polymod.init({modRoot: 'mods', dirs: modList, framework: OPENFL});
+		polymod.Polymod.init({modRoot: 'mods', dirs: modList, framework: FLIXEL});
+
 		#end
 
 		#if USE_SHADERS

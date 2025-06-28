@@ -41,41 +41,13 @@ class FreeplayState extends MusicBeatState {
 
 	private var iconArray:Array<HealthIcon> = [];
 
+	var takenFilenames:Array<String> = [];
+	
 	override function create() {
-		var path = 'assets/data/weeks';
-		
-		if (!CoolUtil.fileExists(path)) return;
-		
-		var itemCount:Int = 0;
-		var items:Array<String> = CoolUtil.readDir(path);
-		for (item in items) {
-			if (!item.endsWith('.xml')) return;
-			var weekPath:String = '$path/$item';
-			
-			itemCount += 1;
-			
-			#if sys
-			var weekXml:Xml = Xml.parse(File.getContent(weekPath));
-			#else
-			var weekXml:Xml = Xml.parse(Assets.getText(weekPath));
-			#end
-			
-			// week parser!
-			var root:Xml = weekXml.firstElement();
-			
-			if (root.get("hideOnFreeplay") != "true") {
-				if (StoryMenuState.weekUnlocked.get(root.get("name")) != null ? StoryMenuState.weekUnlocked[root.get("name")] : root.get("unlocked") == "true") {
-					for (song in root.elementsNamed("Song")) {
-						if (song.get("name") != null) {
-							var color:String = '0x' + song.get("color");
-							addSong(song.get("name"), root.get("name"), song.get("icon"));
-							coolColors.push(FlxColor.fromString(color));
-						}
-					}
-				}
-			}
+		for (modfold in TitleState.modList) {
+			processWeekXmls('mods/' + modfold);
 		}
-
+		processWeekXmls('assets');
 		/* 
 			if (FlxG.sound.music != null)
 			{
@@ -169,6 +141,43 @@ class FreeplayState extends MusicBeatState {
 		changeDiff();
 	}
 
+	function processWeekXmls(rootPath:String = 'assets') {
+		var path = rootPath + '/data/weeks';
+		
+		if (!CoolUtil.fileExists(path)) return;
+		
+		var itemCount:Int = 0;
+		var items:Array<String> = CoolUtil.readDir(path);
+		for (item in items) {
+			if (!item.endsWith('.xml') || takenFilenames.contains(item)) return;
+			takenFilenames.push(item);
+			var weekPath:String = '$path/$item';
+			
+			itemCount += 1;
+			
+			#if sys
+			var weekXml:Xml = Xml.parse(File.getContent(weekPath));
+			#else
+			var weekXml:Xml = Xml.parse(Assets.getText(weekPath));
+			#end
+			
+			// week parser!
+			var root:Xml = weekXml.firstElement();
+			
+			if (root.get("hideOnFreeplay") != "true") {
+				if (StoryMenuState.weekUnlocked.get(root.get("name")) != null ? StoryMenuState.weekUnlocked[root.get("name")] : root.get("unlocked") == "true") {
+					for (song in root.elementsNamed("Song")) {
+						if (song.get("name") != null) {
+							var color:String = '0x' + song.get("color");
+							addSong(song.get("name"), root.get("name"), song.get("icon"));
+							coolColors.push(FlxColor.fromString(color));
+						}
+					}
+				}
+			}
+		}
+	}
+	
 	public function addSong(songName:String, weekName:String, songCharacter:String) {
 		songs.push(new SongMetadata(songName, weekName, songCharacter));
 	}

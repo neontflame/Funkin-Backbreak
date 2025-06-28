@@ -48,59 +48,14 @@ class StoryMenuState extends MusicBeatState {
 	var sprDifficulty:FlxSprite;
 	var leftArrow:FlxSprite;
 	var rightArrow:FlxSprite;
-
+	
+	var takenFilenames:Array<String> = [];
+	
 	override function create() {
-		var path = 'assets/data/weeks';
-		
-		// if (!CoolUtil.fileExists(path)) return;
-		
-		var items:Array<String> = CoolUtil.readDir(path);
-		for (item in items) {
-			if (!item.endsWith('.xml')) return;
-			var weekPath:String = '$path/$item';
-
-			trace('[STORYMENUSTATE] ' + weekPath);
-			
-			#if sys
-			var weekXml:Xml = Xml.parse(File.getContent(weekPath));
-			#else
-			var weekXml:Xml = Xml.parse(Assets.getText(weekPath));
-			#end
-			
-			// week parser!
-			var root:Xml = weekXml.firstElement();
-			var storyIter = root.elementsNamed("StoryInfo");
-			if (storyIter.hasNext()) {
-				if (root.get("hideOnStory") != "true") {
-					var unlock:String = root.get("unlocked");
-					
-					if (weekUnlocked.get(root.get("name")) == null) {
-						if (unlock != null && unlock == "false") weekUnlocked.set(root.get("name"), false);
-						else weekUnlocked.set(root.get("name"), true);
-					}
-					
-					var name:String = root.get("name");
-					if (name != null) weekNames.push(name);
-					
-					var storyInfo = storyIter.next();
-					var opponent:String = storyInfo.get("opponent");
-					var player:String = storyInfo.get("player");
-					var girlfriend:String = storyInfo.get("girlfriend");
-					weekCharacters.push([opponent, player, girlfriend]);
-					weekImgs.push(storyInfo.get("weekImg"));
-					
-					trace('[STORYMENUSTATE] Add "' + root.get("name") + '" info');
-					// Songs
-					var songs:Array<String> = [];
-					for (song in root.elementsNamed("Song")) {
-						var songName:String = song.get("name");
-						if (songName != null) songs.push(songName);
-					}
-					weekData.push(songs);
-					trace('[STORYMENUSTATE] Add "' + root.get("name") + '" songs');
-				}
-			}
+		for (modfold in TitleState.modList) {
+			processWeekXmls('mods/' + modfold);
 		}
+		processWeekXmls('assets');
 		
 		transIn = FlxTransitionableState.defaultTransIn;
 		transOut = FlxTransitionableState.defaultTransOut;
@@ -241,6 +196,61 @@ class StoryMenuState extends MusicBeatState {
 		super.create();
 	}
 
+	function processWeekXmls(rootPath:String = 'assets') {
+		var path = rootPath + '/data/weeks';
+		
+		if (!CoolUtil.fileExists(path)) return;
+		
+		var items:Array<String> = CoolUtil.readDir(path);
+		for (item in items) {
+			if (!item.endsWith('.xml') || takenFilenames.contains(item)) return;
+			takenFilenames.push(item);
+			var weekPath:String = '$path/$item';
+
+			trace('[STORYMENUSTATE] ' + weekPath);
+			
+			#if sys
+			var weekXml:Xml = Xml.parse(File.getContent(weekPath));
+			#else
+			var weekXml:Xml = Xml.parse(Assets.getText(weekPath));
+			#end
+			
+			// week parser!
+			var root:Xml = weekXml.firstElement();
+			var storyIter = root.elementsNamed("StoryInfo");
+			if (storyIter.hasNext()) {
+				if (root.get("hideOnStory") != "true") {
+					var unlock:String = root.get("unlocked");
+					
+					if (weekUnlocked.get(root.get("name")) == null) {
+						if (unlock != null && unlock == "false") weekUnlocked.set(root.get("name"), false);
+						else weekUnlocked.set(root.get("name"), true);
+					}
+					
+					var name:String = root.get("name");
+					if (name != null) weekNames.push(name);
+					
+					var storyInfo = storyIter.next();
+					var opponent:String = storyInfo.get("opponent");
+					var player:String = storyInfo.get("player");
+					var girlfriend:String = storyInfo.get("girlfriend");
+					weekCharacters.push([opponent, player, girlfriend]);
+					weekImgs.push(storyInfo.get("weekImg"));
+					
+					trace('[STORYMENUSTATE] Add "' + root.get("name") + '" info');
+					// Songs
+					var songs:Array<String> = [];
+					for (song in root.elementsNamed("Song")) {
+						var songName:String = song.get("name");
+						if (songName != null) songs.push(songName);
+					}
+					weekData.push(songs);
+					trace('[STORYMENUSTATE] Add "' + root.get("name") + '" songs');
+				}
+			}
+		}
+	}
+	
 	override function update(elapsed:Float) {
 		// scoreText.setFormat('VCR OSD Mono', 32);
 		lerpScore = MathFunctions.fixedLerp(lerpScore, intendedScore, 0.5);

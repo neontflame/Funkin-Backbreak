@@ -14,6 +14,9 @@ haxelib set hxcpp 4.3.2
 haxelib set hscript-iris 1.1.3
 haxelib git flxanimate https://github.com/FixedData/flxanimate
 haxelib set funkin-modchart 1.2.0
+haxelib install polymod
+haxelib git jsonpath https://github.com/EliteMasterEric/jsonpath
+haxelib git thx.core https://github.com/fponticelli/thx.core
 echo Building game
 title Backbreak Engine Compile Helper - Building game
 lime test windows
