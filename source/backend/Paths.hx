@@ -23,7 +23,13 @@ class Paths {
 		return '$library:assets/$library/$file';
 	}
 
-	inline static function getPreloadPath(file:String) {
+	static function getPreloadPath(file:String) {
+		/* for (modfold in TitleState.modList) {
+			var pathly:String = 'mods/$modfold/$file';
+			if (CoolUtil.fileExists(pathly))
+				return pathly;
+		}
+		*/
 		return 'assets/$file';
 	}
 
@@ -80,12 +86,12 @@ class Paths {
 		var existingType:String = 'hx';
 		
 		for (file in filetypes) {
-			if (CoolUtil.fileExists('assets/scripts/$key.$file')) {
+			if (CoolUtil.fileExists(getPath('scripts/$key.$file', TEXT, null))) {
 				existingType = file;
 			}
 		}
 		
-		return 'assets/scripts/$key.$existingType';
+		return getPath('scripts/$key.$existingType', TEXT, null);
 	}
 	
 	inline static public function getSparrowAtlas(key:String, ?library:String) {

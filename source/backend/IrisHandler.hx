@@ -9,9 +9,10 @@ import sys.io.File;
 using StringTools;
 
 class IrisHandler {
-	public static var path:String = "assets/scripts";
+	public static var path:String = "scripts";
 	public static var extensions:Array<String> = ["hx", "hxs", "hxc", "hscript"];
-
+	
+	var takenFilenames:Array<String> = [];
 	var scripts:Array<Iris> = [];
 
 	public function new(?folders:Array<String>) {
@@ -21,8 +22,15 @@ class IrisHandler {
 
 
 	public function loadFolder(folder:String):Void {
-		if (!CoolUtil.fileExists(path + '/' + folder)) return;
-		var items:Array<String> = CoolUtil.readDir(path + '/' + folder);
+		for (modfold in TitleState.modList) {
+			miniLoadFolder('mods/' + modfold, folder);
+		}
+		miniLoadFolder('assets', folder);
+	}
+	
+	public function miniLoadFolder(rootPath:String, folder:String):Void {
+		if (!CoolUtil.fileExists(rootPath + '/' + path + '/' + folder)) return;
+		var items:Array<String> = CoolUtil.readDir(rootPath + '/' + path + '/' + folder);
 		for (item in items) {
 			var extCount:Int = 0;
 			
@@ -33,7 +41,10 @@ class IrisHandler {
 			if (extCount <= 0) return;
 			
 			var scriptPath:String = '$path/$folder/$item';
-			addByPath(scriptPath);
+			if (!takenFilenames.contains(item)) {
+				takenFilenames.push(item);
+				addByPath(scriptPath);
+			}
 		}
 	}
 	

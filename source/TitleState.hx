@@ -59,14 +59,18 @@ class TitleState extends MusicBeatState {
 		#if polymod
 		modList = [];
 		
-		for (i in polymod.Polymod.scan({modRoot: 'mods'})) {
-			modList.push(i.id);
+		if (!CoolUtil.fileExists('mods')) return;
+		
+		var items:Array<String> = CoolUtil.readDir('mods');
+		//It's Fucking,2 am and 25 minutes
+		for (item in items) {
+			trace(item);
+			modList.push(item);
 		}
 		
-		polymod.Polymod.init({modRoot: 'mods', dirs: modList, framework: FLIXEL});
-
+		polymod.Polymod.init({modRoot: './mods', dirs: modList, framework: OPENFL});
 		#end
-
+		
 		#if USE_SHADERS
 		swagShader = new ColorSwap();
 		#end
