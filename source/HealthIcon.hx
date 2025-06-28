@@ -32,10 +32,11 @@ class HealthIcon extends FlxSprite {
 
 	public function changeIcon(char:String) {
 		var charSplit = char.split('-')[0].trim();
-		if (char != 'bf-pixel' && char != 'bf-old') {
-			if (OpenFLAssets.exists(Paths.getPath('images/icons/$charSplit.png'))) {
+		if (!OpenFLAssets.exists(Paths.getPath('images/icons/$char.png'))) {
+			if (OpenFLAssets.exists(Paths.getPath('images/icons/$charSplit.png')))
 				char = charSplit;
-			}
+			else
+				char = 'face';
 		}
 
 		if (char != this.char) {
