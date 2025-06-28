@@ -55,7 +55,14 @@ class TitleState extends MusicBeatState {
 
 	override public function create():Void {
 		#if polymod
-		polymod.Polymod.init({modRoot: 'mods', dirs: ['introMod'], framework: OPENFL});
+		var modList:Array<String> = [];
+		
+		if (CoolUtil.fileExists('mods')) {
+			modList = CoolUtil.readDir('mods');
+			trace(modList);
+		}
+		
+		polymod.Polymod.init({modRoot: 'mods', dirs: modList, framework: OPENFL});
 		#end
 
 		#if USE_SHADERS

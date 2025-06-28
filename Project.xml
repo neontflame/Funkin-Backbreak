@@ -65,7 +65,7 @@ foi<?xml version="1.0" encoding="utf-8"?>
 	
 	<haxelib name="hxvlc" if="cpp"/>
 
-	<!-- <haxelib name="polymod" /> -->
+	<haxelib name="polymod" />
 	<haxelib name="discord_rpc" if="cpp" />
 
 	<haxedef name="FM_ENGINE" value="BACKBREAK"/>
