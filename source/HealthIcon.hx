@@ -1,6 +1,7 @@
 package;
 
 import flixel.FlxSprite;
+import openfl.utils.Assets as OpenFLAssets;
 
 class HealthIcon extends FlxSprite {
 	/**
@@ -30,8 +31,12 @@ class HealthIcon extends FlxSprite {
 	}
 
 	public function changeIcon(char:String) {
-		if (char != 'bf-pixel' && char != 'bf-old')
-			char = char.split('-')[0].trim();
+		var charSplit = char.split('-')[0].trim();
+		if (char != 'bf-pixel' && char != 'bf-old') {
+			if (OpenFLAssets.exists(Paths.getPath('images/icons/$charSplit.png'))) {
+				char = charSplit;
+			}
+		}
 
 		if (char != this.char) {
 			if (animation.getByName(char) == null) {

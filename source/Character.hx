@@ -4,6 +4,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.animation.FlxBaseAnimation;
 import flixel.graphics.frames.FlxAtlasFrames;
+import openfl.utils.Assets as OpenFLAssets;
 
 import backend.IrisHandler;
 
@@ -38,7 +39,7 @@ class Character extends FlxSprite {
 		charScript = new IrisHandler();
 		var file:String = Paths.script('characters/' + curCharacter);
 		
-		if (CoolUtil.fileExists(file))
+		if (OpenFLAssets.exists(file))
 		{
 			trace("[CHARACTER] " + file);
 			charScript.addByPath(file);

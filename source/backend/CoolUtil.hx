@@ -104,7 +104,14 @@ class CoolUtil {
 	public static function readDir(path):Array<String> {
 		#if sys
 		var items:Array<String> = FileSystem.readDirectory(path);
+		return items;
 		#elseif openfl
+		return openflReadDir(path);
+		#end
+		
+	}
+	
+	public static function openflReadDir(path):Array<String> {
 		var items:Array<String> = [];
 		var allAssets = openfl.Assets.list();
 
@@ -117,8 +124,6 @@ class CoolUtil {
 				}
 			}
 		}
-		#end
-		
 		return items;
 	}
 		/**

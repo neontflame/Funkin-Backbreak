@@ -1243,7 +1243,7 @@ class PlayState extends MusicBeatState {
 				prefix = 'pixelUI/';
 				suffix = '-pixel';
 		}
-		return Paths.imagePath(base + prefix + (type != '' ? type + '/' : '') + name + suffix);
+		return Paths.image(base + prefix + (type != '' ? type + '/' : '') + name + suffix);
 	}
 
 	private function popUpScore(strumtime:Float, daNote:Note):Void {

@@ -22,15 +22,12 @@ class IrisHandler {
 
 
 	public function loadFolder(folder:String):Void {
-		for (modfold in TitleState.modList) {
-			miniLoadFolder('mods/' + modfold, folder);
-		}
 		miniLoadFolder('assets', folder);
 	}
 	
 	public function miniLoadFolder(rootPath:String, folder:String):Void {
-		if (!CoolUtil.fileExists(rootPath + '/' + path + '/' + folder)) return;
-		var items:Array<String> = CoolUtil.readDir(rootPath + '/' + path + '/' + folder);
+		if (!Assets.exists('assets/' + path + '/' + folder)) return;
+		var items:Array<String> = CoolUtil.openflReadDir('assets/' + path + '/' + folder);
 		for (item in items) {
 			var extCount:Int = 0;
 			
@@ -49,11 +46,7 @@ class IrisHandler {
 	}
 	
 	public function addByPath(path:String):Void {
-		#if sys
-		var script:Iris = new Iris(File.getContent(path), {name: path, autoRun: true, autoPreset: true});
-		#else
 		var script:Iris = new Iris(Assets.getText(path), {name: path, autoRun: true, autoPreset: true});
-		#end
 		trace('[SCRIPT LOADED] $path');
 		add(script);
 	}

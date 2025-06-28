@@ -67,7 +67,7 @@ class Paths {
 		var existingType:String = 'hx';
 		
 		for (file in filetypes) {
-			if (CoolUtil.fileExists(getPath('scripts/$key.$file'))) {
+			if (OpenFlAssets.exists(getPath('scripts/$key.$file'))) {
 				existingType = file;
 			}
 		}
