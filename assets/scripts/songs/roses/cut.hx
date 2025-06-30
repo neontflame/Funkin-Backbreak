@@ -1,7 +1,3 @@
-function init() {
-	game.hasCutscene = true;
-}
-
 function cutscene() {
 	FlxG.sound.play(Paths.sound('ANGRY'));
 	softcodedSchoolIntro(game.newDialogueBox(game.dialogue, game.startCountdown, game.camHUD));

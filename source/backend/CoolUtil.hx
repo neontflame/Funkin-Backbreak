@@ -136,14 +136,14 @@ class CoolUtil {
 			// Clear OpenFL & Lime Assets
 			OpenFLAssets.cache.clear();
 			Assets.cache.clear();
-			trace('[CLEARCACHE] Assets cleared!');
+			trace('[COOLUTIL] Assets cleared!');
 		} 
 		
 		if (bitmaps) {
 			// Clear all Flixel bitmaps
 			FlxG.bitmap.dumpCache();
 			FlxG.bitmap.clearCache();
-			trace('[CLEARCACHE] Bitmaps cleared!');
+			trace('[COOLUTIL] Bitmaps cleared!');
 		}
 		
 		var soundCount:Int = 0;
@@ -156,15 +156,15 @@ class CoolUtil {
 				
 				soundCount += 1;
 			});
-			trace('[CLEARCACHE] $soundCount sounds cleared!');
+			trace('[COOLUTIL] $soundCount sounds cleared!');
 			FlxG.sound.list.clear();
 			FlxG.sound.destroy(false);
-			trace('[CLEARCACHE] Soundlist cleared!');
+			trace('[COOLUTIL] Soundlist cleared!');
 		}
 		
 		// Run garbage collector just in case none of that worked
 		System.gc();
-			trace('[CLEARCACHE] Garbage collected!');
+			trace('[COOLUTIL] Garbage collected!');
 	}
 
 }

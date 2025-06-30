@@ -1,10 +1,6 @@
 import LoadingState;
 import CutsceneAnimTestState;
 
-function init() {
-	game.hasCutscene = true;
-}
-
 function createPost() {
 	/* timeline.queueBeat(5, 
 	function(){

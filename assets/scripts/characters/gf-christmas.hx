@@ -1,6 +1,5 @@
 function createCharacter() {
 	// trace(char.animation.curAnim.name);
-	char.exoticDance = true;
 	char.charScript.addByPath(Paths.script('characters/gfCommonScript'));
 	char.charScript.set('char', char);
 	

@@ -5,7 +5,6 @@ import bg.TankmenBG;
 var animationNotes:Array<Dynamic> = [];
 	
 function createCharacter() {
-	char.exoticDance = true;
 	char.frames = Paths.getSparrowAtlas('characters/picoSpeaker');
 	char.quickAnimAdd('shoot1', 'Pico shoot 1');
 	char.quickAnimAdd('shoot2', 'Pico shoot 2');
@@ -56,4 +55,8 @@ function update(elapsed){
 
 function sortAnims(x, y) {
 	return x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : 0;
+}
+
+function dance() {
+	// empty lel!
 }

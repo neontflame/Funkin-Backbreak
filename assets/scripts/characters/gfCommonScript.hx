@@ -6,7 +6,6 @@ using StringTools;
 
 function createCharacter() {
 	// trace(char.animation.curAnim.name);
-	char.exoticDance = true;
 }
 
 var gfDadVis:Bool = false;

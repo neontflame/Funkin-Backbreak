@@ -5,7 +5,7 @@ var game;
 
 function createPost() {
 	game = PlayState.instance;
-	game.exoticEnding = true;
+	// game.exoticEnding = true;
 }
 
 function endSongPost(difficulty) {

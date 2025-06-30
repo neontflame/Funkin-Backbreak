@@ -1,9 +1,5 @@
 import flixel.util.FlxColor;
 
-function init() {
-	game.hasCutscene = true;
-}
-
 function cutscene()
 {
 	var game = PlayState.instance;

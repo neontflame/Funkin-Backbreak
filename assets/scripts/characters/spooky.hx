@@ -1,7 +1,6 @@
 import flixel.animation.FlxBaseAnimation;
 
 function createCharacter() {
-	char.exoticDance = true;
 	char.y += 200;
 	
 	char.frames = Paths.getSparrowAtlas('characters/spooky_kids_assets');

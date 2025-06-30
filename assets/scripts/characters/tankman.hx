@@ -27,7 +27,6 @@ function createCharacter() {
 	char.playAnim('idle');
 
 	char.flipX = true;
-	char.exoticDance = true;
 	
 	char.x += 50;
 	char.y += 200;

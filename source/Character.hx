@@ -20,8 +20,6 @@ class Character extends FlxSprite {
 	public var curCharacter:String = 'bf';
 	public var gameOverChar:String = '';
 	public var singLength:Float = 4;
-
-	public var exoticDance:Bool = false;
 	
 	public var holdTimer:Float = 0;
 	
@@ -129,9 +127,7 @@ class Character extends FlxSprite {
 		if (!debugMode) {
 			charScript.call('dance');
 			
-			if (exoticDance) {
-				// nothing lol! script it yerself
-			} else {
+			if (!charScript.functionExists('dance')) {
 				playAnim('idle');
 			}
 		}

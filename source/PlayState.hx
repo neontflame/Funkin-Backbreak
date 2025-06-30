@@ -57,7 +57,6 @@ class PlayState extends MusicBeatState {
 	public static var deathCounter:Int = 0;
 	public static var practiceMode:Bool = false;
 	public static var seenCutscene:Bool = false;
-	public var hasCutscene:Bool = false;
 	public var botplay:Bool = false;
 	
 	public var timeline:EventTimeline;
@@ -360,7 +359,7 @@ class PlayState extends MusicBeatState {
 
 		if (isStoryMode && !seenCutscene) {
 			seenCutscene = true;
-			if (hasCutscene) {
+			if (script.functionExists('cutscene')) {
 				allScriptCall("cutscene");
 			} else {
 				startCountdown();
@@ -1137,8 +1136,6 @@ class PlayState extends MusicBeatState {
 		#end
 	}
 
-	public var exoticEnding:Bool = false;
-	
 	function endSong():Void {
 		allScriptCall("endSong");
 		seenCutscene = false;
@@ -1199,9 +1196,8 @@ class PlayState extends MusicBeatState {
 				vocals.stop();
 				
 				allScriptCall("endSongPost", [difficulty]);
-				if (exoticEnding) {
-					// do whatever
-				} else {
+				
+				if (!script.functionExists('endSongPost')) {
 					prevCamFollow = camFollow;
 
 					PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + difficulty, PlayState.storyPlaylist[0]);
@@ -1798,5 +1794,6 @@ class PlayState extends MusicBeatState {
 		scoreTxt.text += ' (' + (accuracy > 0 ? Std.string(FlxMath.roundDecimal(accuracy, 2)) + '%' : 'N/A') + ')';
 		
 		scoreTxt.screenCenter(X);
+		allScriptCall("updateScoreTextPost");
 	}
 }

@@ -3,7 +3,7 @@ import PlayState;
 import LoadingState;
 
 function createPost() {
-	game.exoticEnding = true;
+	// game.exoticEnding = true;
 }
 
 function endSongPost(difficulty) {

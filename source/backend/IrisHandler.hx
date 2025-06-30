@@ -26,8 +26,8 @@ class IrisHandler {
 	}
 	
 	public function miniLoadFolder(rootPath:String, folder:String):Void {
-		if (!Assets.exists('assets/' + path + '/' + folder)) return;
-		var items:Array<String> = CoolUtil.openflReadDir('assets/' + path + '/' + folder);
+		trace('[IRISHANDLER] Attempting to load from $rootPath/$path/$folder');
+		var items:Array<String> = CoolUtil.openflReadDir('$rootPath/$path/$folder');
 		for (item in items) {
 			var extCount:Int = 0;
 			
@@ -37,7 +37,8 @@ class IrisHandler {
 			
 			if (extCount <= 0) return;
 			
-			var scriptPath:String = '$path/$folder/$item';
+			var scriptPath:String = '$rootPath/$path/$folder/$item';
+			trace('[IRISHANDLER] Attempting to load $scriptPath');
 			if (!takenFilenames.contains(item)) {
 				takenFilenames.push(item);
 				addByPath(scriptPath);
@@ -47,7 +48,7 @@ class IrisHandler {
 	
 	public function addByPath(path:String):Void {
 		var script:Iris = new Iris(Assets.getText(path), {name: path, autoRun: true, autoPreset: true});
-		trace('[SCRIPT LOADED] $path');
+		trace('[IRISHANDLER] Script loaded - $path');
 		add(script);
 	}
 	
@@ -66,6 +67,14 @@ class IrisHandler {
 		}
 	}
 
+	public function functionExists(func:String, ?args:Array<Dynamic>):Bool {
+		for (script in scripts) {
+			var scriptFunc:Dynamic = script.get(func);
+			if (scriptFunc != null && Reflect.isFunction(scriptFunc)) return true;
+		}
+		return false;
+	}
+	
 	public function set(name:String, value:Dynamic):Void {
 		for (script in scripts)
 			script.set(name, value, true);
