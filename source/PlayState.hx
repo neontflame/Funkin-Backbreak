@@ -669,6 +669,18 @@ class PlayState extends MusicBeatState {
 			for (songNotes in section.sectionNotes) {
 				var daStrumTime:Float = songNotes[0];
 				var daNoteData:Int = Std.int(songNotes[1] % 4);
+				var daNoteType:String = 'default';
+				if (songNotes[3] != null) {
+					if (songNotes[3] == true) {
+						daNoteType = 'alt-anim';
+					}
+					if (songNotes[3] == false) {
+						daNoteType = 'default';
+					}
+					else {
+						daNoteType = songNotes[3];
+					}
+				}
 
 				var gottaHitNote:Bool = section.mustHitSection;
 
@@ -682,9 +694,9 @@ class PlayState extends MusicBeatState {
 				else
 					oldNote = null;
 
-				var swagNote:Note = new Note(daStrumTime, daNoteData, oldNote);
+				var swagNote:Note = new Note(daStrumTime, daNoteData, daNoteType, oldNote);
 				swagNote.sustainLength = songNotes[2];
-				swagNote.altNote = songNotes[3];
+				// swagNote.altNote = songNotes[3];
 				swagNote.scrollFactor.set(0, 0);
 
 				var susLength:Float = swagNote.sustainLength;
@@ -695,7 +707,7 @@ class PlayState extends MusicBeatState {
 				for (susNote in 0...Math.floor(susLength)) {
 					oldNote = unspawnNotes[Std.int(unspawnNotes.length - 1)];
 
-					var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet, daNoteData, oldNote, true);
+					var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet, daNoteData, daNoteType, oldNote, true);
 					sustainNote.scrollFactor.set();
 					unspawnNotes.push(sustainNote);
 
@@ -1067,7 +1079,7 @@ class PlayState extends MusicBeatState {
 						if (SONG.notes[Math.floor(curStep / 16)].altAnim)
 							altAnim = '-alt';
 					}
-					if (daNote.altNote)
+					if (daNote.noteType == 'alt-anim')
 						altAnim = '-alt';
 
 					switch (Math.abs(daNote.noteData)) {
@@ -1085,7 +1097,8 @@ class PlayState extends MusicBeatState {
 
 					if (SONG.needsVoices)
 						vocals.volume = 1;
-
+					
+					daNote.noteScript.call('noteHit', ['opponent']);
 					daNote.kill();
 					notes.remove(daNote, true);
 					daNote.destroy();
@@ -1099,14 +1112,17 @@ class PlayState extends MusicBeatState {
 					doKill = daNote.y > FlxG.height;
 
 				if (doKill) {
+					daNote.noteScript.call('noteMiss');
 					if (daNote.tooLate || !daNote.wasGoodHit) {
-						health -= 0.0475;
-						if (!daNote.isSustainNote) {
-							misses++;
-							notesTotal += 1;
+						if (!daNote.noteScript.functionExists('noteMiss')) {
+							health -= 0.0475;
+							if (!daNote.isSustainNote) {
+								misses++;
+								notesTotal += 1;
+							}
+							vocals.volume = 0;
+							noteMiss(Math.round(daNote.noteData));
 						}
-						vocals.volume = 0;
-						noteMiss(Math.round(daNote.noteData));
 					}
 
 					daNote.active = false;
@@ -1633,6 +1649,7 @@ class PlayState extends MusicBeatState {
 
 	function goodNoteHit(note:Note):Void {
 		allScriptCall('goodNoteHit', [note]);
+		note.noteScript.call('noteHit', ['player']);
 		
 		if (!note.wasGoodHit) {
 			if (!note.isSustainNote) {

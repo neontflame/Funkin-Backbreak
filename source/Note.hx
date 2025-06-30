@@ -4,7 +4,12 @@ import ui.PreferencesMenu;
 import shaders.ColorSwap;
 import flixel.FlxSprite;
 
+import backend.IrisHandler;
+import openfl.utils.Assets as OpenFLAssets;
+
 class Note extends FlxSprite {
+	public var noteScript:IrisHandler;
+	
 	public var strumTime:Float = 0;
 
 	public var mustPress:Bool = false;
@@ -13,13 +18,13 @@ class Note extends FlxSprite {
 	public var tooLate:Bool = false;
 	public var wasGoodHit:Bool = false;
 	public var willMiss:Bool = false;
-	public var altNote:Bool = false;
 	public var prevNote:Note;
 
 	public var sustainLength:Float = 0;
 	public var isSustainNote:Bool = false;
 	public var isSustainEnd:Bool = true;
 
+	public var noteType:String = 'default';
 	var colorSwap:ColorSwap;
 
 	public static var swagWidth:Float = 160 * 0.7;
@@ -29,7 +34,7 @@ class Note extends FlxSprite {
 	public static var BLUE_NOTE:Int = 1;
 	public static var RED_NOTE:Int = 3;
 
-	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false) {
+	public function new(strumTime:Float, noteData:Int, ?_noteType:String = '', ?prevNote:Note, ?sustainNote:Bool = false) {
 		super();
 
 		if (prevNote == null)
@@ -37,6 +42,21 @@ class Note extends FlxSprite {
 
 		this.prevNote = prevNote;
 		isSustainNote = sustainNote;
+		noteType = _noteType;
+		
+		noteScript = new IrisHandler();
+		var file:String = Paths.script('notetypes/' + noteType);
+		
+		if (OpenFLAssets.exists(file))
+		{
+			trace("[NOTETYPE] " + file);
+			noteScript.addByPath(file);
+			noteScript.setup();
+			noteScript.set('note', this);
+			if (PlayState.instance != null) noteScript.set('game', PlayState.instance);
+		} 
+		
+		noteScript.call('createNote');
 
 		x += 50;
 		// MAKE SURE ITS DEFINITELY OFF SCREEN?
@@ -44,55 +64,58 @@ class Note extends FlxSprite {
 		this.strumTime = strumTime;
 
 		this.noteData = noteData;
+		
+		if (!noteScript.functionExists('loadNoteAssets')) {
+			switch (PlayState.curStage) {
+				case 'school' | 'schoolEvil':
+					loadGraphic(Paths.image('ui/noteShit/pixelUI/arrows-pixels'), true, 17, 17);
 
-		switch (PlayState.curStage) {
-			case 'school' | 'schoolEvil':
-				loadGraphic(Paths.image('ui/noteShit/pixelUI/arrows-pixels'), true, 17, 17);
+					animation.add('greenScroll', [6]);
+					animation.add('redScroll', [7]);
+					animation.add('blueScroll', [5]);
+					animation.add('purpleScroll', [4]);
 
-				animation.add('greenScroll', [6]);
-				animation.add('redScroll', [7]);
-				animation.add('blueScroll', [5]);
-				animation.add('purpleScroll', [4]);
+					if (isSustainNote) {
+						loadGraphic(Paths.image('ui/noteShit/pixelUI/arrowEnds'), true, 7, 6);
 
-				if (isSustainNote) {
-					loadGraphic(Paths.image('ui/noteShit/pixelUI/arrowEnds'), true, 7, 6);
+						animation.add('purpleholdend', [4]);
+						animation.add('greenholdend', [6]);
+						animation.add('redholdend', [7]);
+						animation.add('blueholdend', [5]);
 
-					animation.add('purpleholdend', [4]);
-					animation.add('greenholdend', [6]);
-					animation.add('redholdend', [7]);
-					animation.add('blueholdend', [5]);
+						animation.add('purplehold', [0]);
+						animation.add('greenhold', [2]);
+						animation.add('redhold', [3]);
+						animation.add('bluehold', [1]);
+					}
 
-					animation.add('purplehold', [0]);
-					animation.add('greenhold', [2]);
-					animation.add('redhold', [3]);
-					animation.add('bluehold', [1]);
-				}
+					setGraphicSize(Std.int(width * PlayState.daPixelZoom));
+					updateHitbox();
+					antialiasing = false;
+				default:
+					frames = Paths.getSparrowAtlas('ui/noteShit/NOTE_assets');
 
-				setGraphicSize(Std.int(width * PlayState.daPixelZoom));
-				updateHitbox();
-				antialiasing = false;
-			default:
-				frames = Paths.getSparrowAtlas('ui/noteShit/NOTE_assets');
+					animation.addByPrefix('greenScroll', 'green instance');
+					animation.addByPrefix('redScroll', 'red instance');
+					animation.addByPrefix('blueScroll', 'blue instance');
+					animation.addByPrefix('purpleScroll', 'purple instance');
 
-				animation.addByPrefix('greenScroll', 'green instance');
-				animation.addByPrefix('redScroll', 'red instance');
-				animation.addByPrefix('blueScroll', 'blue instance');
-				animation.addByPrefix('purpleScroll', 'purple instance');
+					animation.addByPrefix('purpleholdend', 'pruple end hold');
+					animation.addByPrefix('greenholdend', 'green hold end');
+					animation.addByPrefix('redholdend', 'red hold end');
+					animation.addByPrefix('blueholdend', 'blue hold end');
 
-				animation.addByPrefix('purpleholdend', 'pruple end hold');
-				animation.addByPrefix('greenholdend', 'green hold end');
-				animation.addByPrefix('redholdend', 'red hold end');
-				animation.addByPrefix('blueholdend', 'blue hold end');
+					animation.addByPrefix('purplehold', 'purple hold piece');
+					animation.addByPrefix('greenhold', 'green hold piece');
+					animation.addByPrefix('redhold', 'red hold piece');
+					animation.addByPrefix('bluehold', 'blue hold piece');
 
-				animation.addByPrefix('purplehold', 'purple hold piece');
-				animation.addByPrefix('greenhold', 'green hold piece');
-				animation.addByPrefix('redhold', 'red hold piece');
-				animation.addByPrefix('bluehold', 'blue hold piece');
-
-				setGraphicSize(Std.int(width * 0.7));
-				updateHitbox();
+					setGraphicSize(Std.int(width * 0.7));
+					updateHitbox();
+			}
 		}
-
+		noteScript.call('loadNoteAssets');
+		
 		colorSwap = new ColorSwap();
 		shader = colorSwap.shader;
 		updateColors();
@@ -160,6 +183,8 @@ class Note extends FlxSprite {
 				// prevNote.setGraphicSize();
 			}
 		}
+		
+		noteScript.call('createNotePost');
 	}
 
 	function updateColors() {

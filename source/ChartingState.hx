@@ -214,21 +214,36 @@ class ChartingState extends MusicBeatState {
 		stepperBPM.value = Conductor.bpm;
 		stepperBPM.name = 'song_bpm';
 
-		var characters:Array<String> = Paths.getTextFileArray(Paths.txt('characterList'));
+		var characters:Array<String> = [];
+		for (char in CoolUtil.openflReadDir('assets/scripts/characters')) {
+			var charSplit = char.split('.')[0].trim();
+			characters.push(charSplit);
+		}
+		var stages:Array<String> = [];
+		for (stg in CoolUtil.openflReadDir('assets/scripts/stages')) {
+			var stageSplit = stg.split('.')[0].trim();
+			stages.push(stageSplit);
+		}
 
+		// character/stage dropdowns
 		var player1DropDown = new FlxUIDropDownMenu(10, 100, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true), function(character:String) {
 			_song.player1 = characters[Std.parseInt(character)];
 			updateHeads();
 		});
-		player1DropDown.selectedLabel = _song.player1;
 
 		var player2DropDown = new FlxUIDropDownMenu(140, 100, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true), function(character:String) {
 			_song.player2 = characters[Std.parseInt(character)];
 			updateHeads();
 		});
 
-		player2DropDown.selectedLabel = _song.player2;
+		var stageDropDown = new FlxUIDropDownMenu(140, 125, FlxUIDropDownMenu.makeStrIdLabelArray(stages, true), function(stage:String) {
+			_song.stage = stages[Std.parseInt(stage)];
+		});
 
+		player1DropDown.selectedLabel = _song.player1;
+		player2DropDown.selectedLabel = _song.player2;
+		stageDropDown.selectedLabel = _song.stage;
+		
 		var tab_group_song = new FlxUI(null, UI_box);
 		tab_group_song.name = 'Song';
 		tab_group_song.add(UI_songTitle);
@@ -243,6 +258,7 @@ class ChartingState extends MusicBeatState {
 		tab_group_song.add(stepperSpeed);
 		tab_group_song.add(player1DropDown);
 		tab_group_song.add(player2DropDown);
+		tab_group_song.add(stageDropDown);
 
 		UI_box.addGroup(tab_group_song);
 		UI_box.scrollFactor.set();
@@ -290,7 +306,7 @@ class ChartingState extends MusicBeatState {
 		check_mustHitSection.checked = true;
 		// _song.needsVoices = check_mustHit.checked;
 
-		check_altAnim = new FlxUICheckBox(10, 400, null, null, 'Alt Animation', 100);
+		check_altAnim = new FlxUICheckBox(10, 400, null, null, 'Alt anim. section', 100);
 		check_altAnim.name = 'check_altAnim';
 
 		check_changeBPM = new FlxUICheckBox(10, 60, null, null, 'Change BPM', 100);
@@ -310,7 +326,8 @@ class ChartingState extends MusicBeatState {
 	}
 
 	var stepperSusLength:FlxUINumericStepper;
-
+	var notetypeDropDown:FlxUIDropDownMenu;
+	
 	function addNoteUI():Void {
 		var tab_group_note = new FlxUI(null, UI_box);
 		tab_group_note.name = 'Note';
@@ -318,10 +335,22 @@ class ChartingState extends MusicBeatState {
 		stepperSusLength = new FlxUINumericStepper(10, 10, Conductor.stepCrochet / 2, 0, 0, Conductor.stepCrochet * 16);
 		stepperSusLength.value = 0;
 		stepperSusLength.name = 'note_susLength';
+		
+		var noteTypes:Array<String> = ['default', 'alt-anim'];
+		for (type in CoolUtil.openflReadDir('assets/scripts/notetypes')) {
+			var typeSplit = type.split('.')[0].trim();
+			noteTypes.push(typeSplit);
+		}
+		
+		notetypeDropDown = new FlxUIDropDownMenu(140, 125, FlxUIDropDownMenu.makeStrIdLabelArray(noteTypes, true), function(type:String) {
+			if (curSelectedNote != null) curSelectedNote[3] = noteTypes[Std.parseInt(type)];
+		});
+		notetypeDropDown.selectedLabel = (curSelectedNote != null ? curSelectedNote[3] : 'default');
 
 		var applyLength:FlxButton = new FlxButton(100, 10, 'Apply');
 
 		tab_group_note.add(stepperSusLength);
+		tab_group_note.add(notetypeDropDown);
 		tab_group_note.add(applyLength);
 
 		UI_box.addGroup(tab_group_note);
@@ -439,8 +468,8 @@ class ChartingState extends MusicBeatState {
 
 		strumLine.y = getYfromStrum((Conductor.songPosition - sectionStartTime()) % (Conductor.stepCrochet * _song.notes[curSection].lengthInSteps));
 
-		if (FlxG.keys.justPressed.X)
-			toggleAltAnimNote();
+		// if (FlxG.keys.justPressed.X)
+			// toggleAltAnimNote();
 
 		if (curBeat % 4 == 0 && curStep >= 16 * (curSection + 1)) {
 			trace(curStep);
@@ -615,10 +644,10 @@ class ChartingState extends MusicBeatState {
 		if (curSelectedNote != null) {
 			if (curSelectedNote[3] != null) {
 				trace('ALT NOTE SHIT');
-				curSelectedNote[3] = !curSelectedNote[3];
+				curSelectedNote[3] = 'default';
 				trace(curSelectedNote[3]);
 			} else
-				curSelectedNote[3] = true;
+				curSelectedNote[3] = 'alt-anim';
 		}
 	}
 
@@ -728,6 +757,8 @@ class ChartingState extends MusicBeatState {
 	function updateNoteUI():Void {
 		if (curSelectedNote != null)
 			stepperSusLength.value = curSelectedNote[2];
+			
+		notetypeDropDown.selectedLabel = curSelectedNote[3];
 	}
 
 	function updateGrid():Void {
@@ -771,8 +802,9 @@ class ChartingState extends MusicBeatState {
 			var daNoteInfo = i[1];
 			var daStrumTime = i[0];
 			var daSus = i[2];
+			var daType = (i[3] != null ? i[3] : 'default');
 
-			var note:Note = new Note(daStrumTime, daNoteInfo % 4);
+			var note:Note = new Note(daStrumTime, daNoteInfo % 4, daType);
 			note.sustainLength = daSus;
 			note.setGraphicSize(GRID_SIZE, GRID_SIZE);
 			note.updateHitbox();
@@ -847,13 +879,14 @@ class ChartingState extends MusicBeatState {
 		var noteStrum = getStrumTime(dummyArrow.y) + sectionStartTime();
 		var noteData = Math.floor(FlxG.mouse.x / GRID_SIZE);
 		// var noteSus = 0;
+		var noteTypist = notetypeDropDown.selectedLabel;
 
-		_song.notes[curSection].sectionNotes.push([noteStrum, noteData, 0, false]);
+		_song.notes[curSection].sectionNotes.push([noteStrum, noteData, 0, noteTypist]);
 
 		curSelectedNote = _song.notes[curSection].sectionNotes[_song.notes[curSection].sectionNotes.length - 1];
 
 		if (FlxG.keys.pressed.CONTROL) {
-			_song.notes[curSection].sectionNotes.push([noteStrum, (noteData + 4) % 8, 0, false]);
+			_song.notes[curSection].sectionNotes.push([noteStrum, (noteData + 4) % 8, 0, noteTypist]);
 		}
 
 		trace(noteStrum);
