@@ -44,32 +44,34 @@ class Stage extends FlxTypedGroup<FlxBasic> {
 
 		// this is because I want to avoid editing the fnf chart type
 		// custom stage stuffs will come with forever charts
-		switch (CoolUtil.spaceToDash(PlayState.SONG.song.toLowerCase())) {
-			case 'spookeez' | 'south' | 'monster':
-				curStage = 'spooky';
-			case 'pico' | 'blammed' | 'philly-nice' | 'philly':
-				curStage = 'philly';
-			case 'milf' | 'satin-panties' | 'high':
-				curStage = 'limo';
-			case 'cocoa' | 'eggnog':
-				curStage = 'mall';
-			case 'winter-horrorland':
-				curStage = 'mallEvil';
-			case 'senpai' | 'roses':
-				curStage = 'school';
-			case 'thorns':
-				curStage = 'schoolEvil';
-			case 'guns' | 'stress' | 'ugh':
-				curStage = 'tank';
-			default:
-				curStage = 'stage';
+		if (curStage == "") {
+			switch (CoolUtil.spaceToDash(PlayState.SONG.song.toLowerCase())) {
+				case 'spookeez' | 'south' | 'monster':
+					curStage = 'spooky';
+				case 'pico' | 'blammed' | 'philly-nice' | 'philly':
+					curStage = 'philly';
+				case 'milf' | 'satin-panties' | 'high':
+					curStage = 'limo';
+				case 'cocoa' | 'eggnog':
+					curStage = 'mall';
+				case 'winter-horrorland':
+					curStage = 'mallEvil';
+				case 'senpai' | 'roses':
+					curStage = 'school';
+				case 'thorns':
+					curStage = 'schoolEvil';
+				case 'guns' | 'stress' | 'ugh':
+					curStage = 'tank';
+				default:
+					curStage = 'stage';
+			}
 		}
 
 		PlayState.curStage = curStage;
 		
 		stageScript = new IrisHandler();
 		var file:String = Paths.script('stages/' + PlayState.curStage);
-		if (CoolUtil.fileExists(file))
+		if (OpenFlAssets.exists(file))
 		{
 			trace("[STAGE] " + file);
 			stageScript.addByPath(file);
@@ -79,6 +81,7 @@ class Stage extends FlxTypedGroup<FlxBasic> {
 			stageScript.set('BackgroundGirls', BackgroundGirls);
 			stageScript.set('TankmenBG', TankmenBG);
 			stageScript.set('game', PlayState.instance);
+			stageScript.set('timeline', PlayState.instance.timeline);
 		}
 	}
 

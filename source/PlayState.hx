@@ -60,7 +60,7 @@ class PlayState extends MusicBeatState {
 	public var hasCutscene:Bool = false;
 	public var botplay:Bool = false;
 	
-	var timeline:EventTimeline;
+	public var timeline:EventTimeline;
 
 	var halloweenLevel:Bool = false;
 
@@ -260,7 +260,6 @@ class PlayState extends MusicBeatState {
 		dad = new Character(100, 100, SONG.player2);
 		dad.typeOfChar = 'dad';
 		
-		camPos = new FlxPoint(dad.getGraphicMidpoint().x + dad.camOffset[0], dad.getGraphicMidpoint().y + dad.camOffset[1]);
 		boyfriend = new Character(770, 450, SONG.player1, true);
 		boyfriend.typeOfChar = 'bf';
 
@@ -278,6 +277,8 @@ class PlayState extends MusicBeatState {
 		add(boyfriend);
 
 		stageBuild.createStageFront();
+		
+		camPos = new FlxPoint(dad.getGraphicMidpoint().x + dad.camOffset[0], dad.getGraphicMidpoint().y + dad.camOffset[1]);
 
 		Conductor.songPosition = -5000;
 
