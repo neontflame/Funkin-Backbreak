@@ -3,23 +3,35 @@ package backend;
 import backend.Conductor.BPMChangeEvent;
 import flixel.addons.ui.FlxUIState;
 import openfl.system.System;
+import backend.IrisHandler;
 
 class MusicBeatState extends FlxUIState {
 	private var curStep:Int = 0;
 	private var curBeat:Int = 0;
 	private var controls(get, never):Controls;
-
+	
+	var globalScript:IrisHandler; 
+	
 	inline function get_controls():Controls
 		return PlayerSettings.player1.controls;
 
 	override function create() {
 		CoolUtil.clearCache(true, true, false);
 		
-		// dump
-		// if (transIn != null)
-		//	trace('reg ' + transIn.region);
-			
+		// lifted from Funkin-Multikey
+		globalScript = new IrisHandler();
+		
+		var file:String = Paths.script('global');
+		if (openfl.utils.Assets.exists(file))
+		{
+			globalScript.addByPath(file);
+			globalScript.setup();
+			globalScript.set('this', this);
+		}
+		
+		globalScript.call('create');
 		super.create();
+		globalScript.call('createPost');
 	}
 
 	override function update(elapsed:Float) {
@@ -39,8 +51,10 @@ class MusicBeatState extends FlxUIState {
 
 		if (FlxG.keys.justPressed.F11)
 			FlxG.fullscreen = !FlxG.fullscreen;
-
+		
+		globalScript.call('update', [elapsed]);
 		super.update(elapsed);
+		globalScript.call('updatePost', [elapsed]);
 	}
 
 	private function updateBeat():Void {
@@ -62,11 +76,13 @@ class MusicBeatState extends FlxUIState {
 	}
 
 	public function stepHit():Void {
+		globalScript.call('stepHit', [curStep]);
 		if (curStep % 4 == 0)
 			beatHit();
 	}
 
 	public function beatHit():Void {
+		globalScript.call('beatHit', [curBeat]);
 		// do nothing as of yet
 	}
 }
