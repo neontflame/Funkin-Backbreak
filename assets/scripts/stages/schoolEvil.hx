@@ -5,6 +5,7 @@ function createStageBack() {
 	
 	game.boyfriend.x += 200;
 	game.boyfriend.y += 220;
+	game.boyfriend.camOffset = [200, -200];
 
 	var bg:FlxSprite = new FlxSprite(400, 200);
 	bg.frames = Paths.getSparrowAtlas('backgrounds/schoolEvil/animatedEvilSchool');

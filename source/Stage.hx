@@ -104,11 +104,11 @@ class Stage extends FlxTypedGroup<FlxBasic> {
 		stageScript.call('createStageFront');
 	}
 
-	public function stageUpdate(curBeat:Int, boyfriend:Character, gf:Character, dad:Character) {
+	public function stageUpdate(curBeat:Int) {
 		stageScript.call('beatHit', [curBeat]);
 	}
 
-	public function stageUpdateConstant(elapsed:Float, boyfriend:Character, gf:Character, dad:Character) {
+	public function stageUpdateConstant(elapsed:Float) {
 		stageScript.call('update', [elapsed]);
 	}
 

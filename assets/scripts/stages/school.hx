@@ -9,6 +9,7 @@ function createStageBack() {
 	
 	game.boyfriend.x += 200;
 	game.boyfriend.y += 220;
+	game.boyfriend.camOffset = [200, -200];
 
 	PlayState.defaultCamZoom = 1.05;
 

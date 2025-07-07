@@ -14,6 +14,8 @@ function createCharacter() {
 	char.loadOffsetFile('spooky');
 
 	char.playAnim('danceRight');
+	
+	char.danceInterval = 1;
 }
 
 var leDance = true;

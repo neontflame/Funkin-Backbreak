@@ -151,6 +151,8 @@ class PlayState extends MusicBeatState {
 		script.loadFolder('songs/' + PlayState.SONG.song.toLowerCase());
 		script.set('game', instance);
 		script.set('timeline', timeline);
+		script.set('curBeat', 0);
+		script.set('curStep', 0);
 		allScriptCall("init");
 		
 		/* 
@@ -773,10 +775,6 @@ class PlayState extends MusicBeatState {
 		}
 	}
 
-	function tweenCamIn():Void {
-		FlxTween.tween(FlxG.camera, {zoom: 1.3}, (Conductor.stepCrochet * 4 / 1000), {ease: FlxEase.elasticInOut});
-	}
-
 	override function openSubState(SubState:FlxSubState) {
 		if (paused) {
 			if (FlxG.sound.music != null) {
@@ -874,7 +872,7 @@ class PlayState extends MusicBeatState {
 			#end
 		}
 
-		stageBuild.stageUpdateConstant(elapsed, boyfriend, gf, dad);
+		stageBuild.stageUpdateConstant(elapsed);
 		allScriptCall("update", [elapsed]);
 
 		super.update(elapsed);
@@ -955,26 +953,13 @@ class PlayState extends MusicBeatState {
 		FlxG.watch.addQuick('beatShit', curBeat);
 		FlxG.watch.addQuick('stepShit', curStep);
 
-		if (curSong.toLowerCase() == 'fresh') {
-			switch (curBeat) {
-				case 16:
-					camZooming = true;
-					gfSpeed = 2;
-				case 48:
-					gfSpeed = 1;
-				case 80:
-					gfSpeed = 2;
-				case 112:
-					gfSpeed = 1;
-			}
-		}
-
+		/*
 		if (curSong.toLowerCase() == 'bopeebo') {
 			switch (curBeat) {
 				case 128, 129, 130:
 					vocals.volume = 0;
 			}
-		}
+		}*/
 		// better streaming of shit
 
 		if (!inCutscene && !_exiting) {
@@ -1399,45 +1384,13 @@ class PlayState extends MusicBeatState {
 
 	private function cameraMovement():Void {
 		if (camFollow.x != dad.getMidpoint().x + dad.camOffset.x && !cameraRightSide) {
+			allScriptCall('cameraMovement', ['dad']);
 			camFollow.setPosition(dad.getMidpoint().x + dad.camOffset.x, dad.getMidpoint().y + dad.camOffset.y);
-			// camFollow.setPosition(lucky.getMidpoint().x - 120, lucky.getMidpoint().y + 210);
-			
-			/*
-			we can softcode this !
-			switch (dad.curCharacter) {
-				case 'mom':
-					camFollow.y = dad.getMidpoint().y;
-				case 'senpai' | 'senpai-angry':
-					camFollow.y = dad.getMidpoint().y - 430;
-					camFollow.x = dad.getMidpoint().x - 100;
-			}
-			*/
-
-			if (dad.curCharacter == 'mom')
-				vocals.volume = 1;
-
-			if (SONG.song.toLowerCase() == 'tutorial') {
-				tweenCamIn();
-			}
 		}
 
 		if (cameraRightSide && camFollow.x != boyfriend.getMidpoint().x - boyfriend.camOffset.x) {
+			allScriptCall('cameraMovement', ['bf']);
 			camFollow.setPosition(boyfriend.getMidpoint().x - boyfriend.camOffset.x, boyfriend.getMidpoint().y + boyfriend.camOffset.y);
-
-			switch (curStage) {
-				case 'limo':
-					camFollow.x = boyfriend.getMidpoint().x - 300;
-				case 'school':
-					camFollow.x = boyfriend.getMidpoint().x - 200;
-					camFollow.y = boyfriend.getMidpoint().y - 200;
-				case 'schoolEvil':
-					camFollow.x = boyfriend.getMidpoint().x - 200;
-					camFollow.y = boyfriend.getMidpoint().y - 200;
-			}
-
-			if (SONG.song.toLowerCase() == 'tutorial') {
-				FlxTween.tween(FlxG.camera, {zoom: 1}, (Conductor.stepCrochet * 4 / 1000), {ease: FlxEase.elasticInOut});
-			}
 		}
 	}
 
@@ -1691,24 +1644,23 @@ class PlayState extends MusicBeatState {
 	}
 
 	override function stepHit() {
+		script.set('curStep', curStep);
 		allScriptCall("stepHit");
-		timeline.stepHit(curStep);
 		super.stepHit();
+		
 		if (Math.abs(FlxG.sound.music.time - (Conductor.songPosition - Conductor.offset)) > 20
 			|| (SONG.needsVoices && Math.abs(vocals.time - (Conductor.songPosition - Conductor.offset)) > 20)) {
 			resyncVocals();
 		}
 
-		if (dad.curCharacter == 'spooky' && curStep % 4 == 2) {
-			// dad.dance();
-		}
+		timeline.stepHit(curStep);
 	}
 
 
 	override function beatHit() {
-		super.beatHit();
+		script.set('curBeat', curBeat);
 		allScriptCall("beatHit");
-		timeline.beatHit(curBeat);
+		super.beatHit();
 
 		if (generatedMusic) {
 			notes.members.sort(function(note1:Note, note2:Note) {
@@ -1731,12 +1683,6 @@ class PlayState extends MusicBeatState {
 		// FlxG.log.add('change bpm' + SONG.notes[Std.int(curStep / 16)].changeBPM);
 
 		if (PreferencesMenu.getPref('camera-zoom')) {
-			// HARDCODING FOR MILF ZOOMS!
-			if (curSong.toLowerCase() == 'milf' && curBeat >= 168 && curBeat < 200 && camZooming && FlxG.camera.zoom < 1.35) {
-				FlxG.camera.zoom += 0.015;
-				camHUD.zoom += 0.03;
-			}
-
 			if (camZooming && FlxG.camera.zoom < 1.35 && curBeat % 4 == 0) {
 				FlxG.camera.zoom += 0.015;
 				camHUD.zoom += 0.03;
@@ -1748,36 +1694,15 @@ class PlayState extends MusicBeatState {
 
 		iconP1.updateHitbox();
 		iconP2.updateHitbox();
-
-		if (curBeat % gfSpeed == 0) {
-			gf.dance();
-		}
-
-		if (curBeat % 2 == 0) {
-			if (!boyfriend.animation.curAnim.name.startsWith('sing')) {
-				boyfriend.playAnim('idle');
-			}
-
-			if (!dad.animation.curAnim.name.startsWith('sing')) {
-				dad.dance();
-			}
-		} else if (dad.curCharacter == 'spooky') {
-			if (!dad.animation.curAnim.name.startsWith('sing')) {
-				dad.dance();
-			}
-		}
-
-		if (curBeat % 8 == 7 && curSong == 'Bopeebo') {
-			boyfriend.playAnim('hey', true);
-		}
-
-		if (curBeat % 16 == 15 && SONG.song == 'Tutorial' && dad.curCharacter == 'gf' && curBeat > 16 && curBeat < 48) {
-			boyfriend.playAnim('hey', true);
-			dad.playAnim('cheer', true);
-		}
+		
+		boyfriend.beatHit(curBeat);
+		dad.beatHit(curBeat);
+		gf.beatHit(curBeat);
+		
+		timeline.beatHit(curBeat);
 
 		// stage stuffs
-		stageBuild.stageUpdate(curBeat, boyfriend, gf, dad);
+		stageBuild.stageUpdate(curBeat);
 	}
 
 	public function newDialogueBox(dialogue:Array<String>, ?finishFunction:Dynamic, ?camera:flixel.FlxCamera) {

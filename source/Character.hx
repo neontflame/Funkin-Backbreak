@@ -20,6 +20,7 @@ class Character extends FlxSprite {
 	public var curCharacter:String = 'bf';
 	public var gameOverChar:String = '';
 	public var singLength:Float = 4;
+	public var danceInterval:Float = 2;
 	
 	public var holdTimer:Float = 0;
 	
@@ -133,6 +134,18 @@ class Character extends FlxSprite {
 		}
 	}
 
+	public function beatHit(beat:Float) {
+		charScript.call('beatHit', [beat]);
+		
+		if (beat % danceInterval == 0) {
+			if (!animation.curAnim.name.startsWith('sing')) dance();
+		}
+	}
+	
+	public function stepHit(step:Float) {
+		charScript.call('stepHit', [step]);
+	}
+	
 	public function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Void {
 		charScript.call('playAnim', [AnimName, Force, Reversed, Frame]);
 		animation.play(AnimName, Force, Reversed, Frame);
